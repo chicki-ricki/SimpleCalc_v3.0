@@ -1,6 +1,6 @@
 # SmartCalc v3.0
 
-Реализация SmartCalc v3.0 на языке Go.
+Implementation of SmartCalc v3.0 in Go.
 
 
 ## Contents
@@ -8,148 +8,210 @@
 1. [Chapter I](#chapter-i) \
    1.1. [Introduction](#introduction)
 2. [Chapter II](#chapter-ii) \
-   2.1. [Паттерн MVP](#паттерн-mvp) \
-   2.2. [Паттерн MVVM](#паттерн-mvvm)
+   2.1. [MVP pattern](#mvp-pattern) \
+   2.2. [MVVM pattern](#mvvm-pattern)
 3. [Chapter III](#chapter-iii) \
-   3.1. [Part 1](#part-1-реализация-smartcalc-v30) \
-   3.2. [Part 2](#part-2-дополнительно-кредитный-калькулятор) \
-   3.3. [Part 3](#part-3-дополнительно-депозитный-калькулятор) \
-   3.4. [Part 4](#part-4-дополнительно-конфигурация-и-логирование) \
-   3.5. [Part 5](#part-5-дополнительно-кроссплатформенность)
+   3.1. [Part 1](#part-1-smartcalc-v30-implementation) \
+   3.2. [Part 2](#part-2-bonus-loan-сalculator) \
+   3.3. [Part 3](#part-3-bonus-deposit-calculator) \
+   3.4. [Part 4](#part-4-bonus-configuration-and-logging) \
+   3.5. [Part 5](#part-5-bonus-cross-platform)
+4. [Chapter IV](#chapter-iv)
 
 
 ## Chapter I
 
+![SmartCalc_V3.0](misc/images/SmartCalc_V3.0.jpg)
+
+John was already approaching his destination, and now he understood why the address in the text message was so familiar to him. This was where Seb had once invited him, but unfortunately, he had never been able to find time to stop by. Now the jazz club was clearly closed. Only one man stood nearby, staring sadly at the boarded-up, abandoned building.
+
+`-` "I thought this was a popular place, John said as he approached the stranger."
+
+`-` "What? Yes, it used to be like that, he replied confusedly."
+
+`-` "A guy I know was bragging about it. Said his Dad used to run the place and serve the best non-alcoholic mojitos in Compton. I wish I'd had time to get here earlier when it still worked. I'm John, by the way."
+
+`-` "I’m Thomas. So, you knew Sebastian?"
+
+`-` "Yes, he and I worked in the same department. Well, he was interning there, until one day he suddenly disappeared without a word. And you?"
+
+`-` "We grew up in the same neighborhood. I haven't heard from him lately either. I got a message with a familiar address, so I thought it might be from him."
+
+`-` "A message, you say? With an address and time?" John raised an eyebrow.
+
+`-` "And a promise of answers to all questions, yes," Thomas replied. "It looks like we are here for a reason. And it looks like we're not the only ones," Thomas turned back and noticed a girl looking around the square in front of the jazz club. "Let me guess, a mysterious text message with the promise of answers to all your questions led you here, too?" Thomas asked the girl.
+
+`-` "Yes, exactly," she answered after a little thought.
+
+`-` "Well, now there's three of us!" John exclaimed. "Instead of answers, we only get more questions. I'm John, by the way, and this is Thomas. We literally just got here and met. And you are...?"
+
+`-` "Eve."
+
+`-` "Well, nice to meet you, Eve," said John. "I'm curious to hear your guesses about why we're here and what we're expecting," he hadn't finished talking when another cab pulled up next to them, and a young guy jumped out, dropping his bag on the way.
+He seemed weird to John.
+
+`-` "Chuck?! And you're here, too?" Eve said slightly surprised.
+
+`-` "Oh, hi, Eve! What a far-off place to meet. How small the world is! And what do you mean, here? Did you get that weird text message, too?" Chuck seemed to be out of breath, constantly looking around for either potential dangers or something interesting. "I hope I'm not too late."
+
+`-` "We all got this text here," John interjected. "I'm John, this is Thomas."
+
+`-` "I'm Chuck. Never thought it would be such a mysterious meeting in the middle of nowhere," Chuck said in response, looking around.
+
+`-` "It's not exactly nothing here, though," Thomas replied. "Until a few months ago there was a nice lively jazz club here, owned by the father of a good friend of mine. Who, as it turned out, was an acquaintance of John's. He was a colleague of yours, wasn't he? Except neither John nor I had heard from him in over three months. And the club... Well, you can see how it's turned out," Thomas looked sadly at the building.
+
+`-` "Where did you work?" Eve asked John.
+
+`-` "A local division of SIS," John muttered back. "Administration of network applications and configuration of computer hardware."
+
+`-` "Chuck and I are also from SIS. Different departments and the Eastern division, but still," Eve said thoughtfully. "Where do you work, Thomas?"
+
+`-` "Advanced Solutions Inc. Daughter of SIS, transferred there quite recently. I had to take a vacation to get here, but I was seriously worried about Seb, and apparently not for nothing. Turns out we're all related to SIS in one way or another."
+
+`-` "And not only to it, right, Eve?" Chuck said. "I've got some documents here that I think you might find interesting, so where are they…" Who knows where this conversation would have gone if not for the simultaneous beeping and vibrating of smartphones in everyone's pockets that occurred at that moment.
+
+> Greetings to all! I'm very happy that you were interested and were able to get to your destination right in time. You are gathered here for a reason and will indeed get all the answers. But only after a little test. There is one task that they liked to test me on. But now it's time to switch places a little bit. Prove that you are ready and able to handle the tasks ahead, and then I will answer all of your questions. A test with details is already waiting for you in your personal repositories. Please begin immediately. Thank you.
+
+John thought about what he had read, and only Chuck's quiet whispering distracted him from his thoughts:
+
+`-` "The Terminator…" he whispered.
+
 ## Introduction
 
-В данном проекте Вам предстоит реализовать на языке программирования Go расширенную версию обычного калькулятора, реализующую те же самые функции, что и разработанное ранее приложение в проекте SmartCalc v2.0. Вам предстоит улучшить свои навыки владения новым языком программирования, освоить паттерн MVP или MVVM, а также добавить в приложение функционал справки и истории вычислений.
+In this project you will implement an extended version of the usual calculator in the Go programming language, which implements the same functions as the previously developed application in the SmartCalc v2.0 project. You will improve your skills in the new programming language, learn the MVP or MVVM pattern, and add the help and history functionality to the application.
 
 
 ## Chapter II
 
-### Паттерн MVP
+### MVP pattern
 
-Паттерн MVP имеет общие с MVC два компонента: модель и представление. Но он заменяет контроллер на презентер.
+The MVP pattern has two components in common with MVC: the model and the view. But it replaces the controller with a presenter.
 
-Презентер реализует взаимодействие между моделью и представлением.
-Когда представление уведомляет презентер, что пользователь что-то сделал (например, нажал кнопку), 
-презентер принимает решение об обновлении модели и синхронизирует все изменения между моделью и представлением. 
-Однако, презентер не общается с представлением напрямую. Вместо этого, он общается через интерфейс. 
-Благодаря чему все компоненты приложения впоследствии могут быть протестированы по отдельности.
+The presenter implements the interaction between the model and the view.
+When the view notifies the presenter that the user has done something (e.g., pressed a button),
+the presenter decides to update the model and synchronizes all changes between the model and the view.
+However, the presenter does not interact with the view directly. Instead, it uses an interface to communicate.
+This allows all components of the application to be tested individually afterwards.
 
 ![](misc/images/MVP-Process.png)
 
-Более подробную информацию об этом паттерне можно найти в папке materials.
+### MVVM pattern
 
-### Паттерн MVVM
+MVVM is a more modern update of MVC. The main purpose of MVVM is to provide a clear separation between the presentation and model layers. MVVM supports two-way data binding between View and ViewModel components.
 
-MVVM - это более современная эволюция MVC. Основная цель MVVM - обеспечить четкое разделение между уровнями представления и модели. 
-MVVM поддерживает двустороннюю привязку данных между компонентами View и ViewModel.
+The view acts as a subscriber to property value change events provided by the view model (ViewModel).
+If a property has changed in the view model, it notifies all subscribers about it,
+and the view, in turn, requests the updated property value from the view model.
+If the user interacts with an interface element, the view calls the corresponding command provided by the view model.
 
-Представление выступает подписчиком на события изменения значений свойств предоставляемых моделью представления (ViewModel). 
-В случае, если в модели представления изменилось какое-либо свойство, то она оповещает всех подписчиков об этом, 
-и представление, в свою очередь, запрашивает обновлённое значение свойства из модели представления. 
-В случае, если пользователь воздействует на какой-либо элемент интерфейса, представление вызывает соответствующую команду, предоставленную моделью представления.
-
-Модель представления — с одной стороны, абстракция представления, а с другой — обёртка данных из модели, подлежащих связыванию. 
-То есть, она содержит модель, преобразованную к представлению, а также команды, которыми может пользоваться представление, чтобы влиять на модель.
+A view model is on the one hand an abstraction of a view, and on the other hand a wrapper of data from the model to be bound.
+In other words, it contains the model transformed to the view, as well as the commands the view can use to affect the model.
 
 ![](misc/images/MVVM-Process.png)
-
-Более подробную информацию об этом паттерне можно найти в папке materials.
 
 
 ## Chapter III
 
-## Part 1. Реализация SmartCalc v3.0
+## Part 1. SmartCalc v3.0 implementation
 
-Необходимо реализовать SmartCalc v3.0:
+You need to implement SmartCalc v3.0:
 
-- Программа должна быть разработана на языке Go версии 1.19.2
-- Код программы должен находиться в папке src
-- При написании кода необходимо придерживаться Google Code Style
-- Необходимо разработать десктопное прикладное приложение
-- Подготовить установщик, который будет устанавливать приложение в систему со стандартными настройками (путь инсталляции, создание ярлыка)
-- Необходимо подготовить реализацию с графическим пользовательским интерфейсом под Mac OS, на базе любой GUI-библиотеки или фреймворка (допустима реализация слоя GUI на HTML/CSS/JS)
-- Программа должна быть реализована с использованием паттерна MVVМ или MVP, а также:
-    - не должно быть кода бизнес-логики в коде представлений
-    - не должно быть кода интерфейса в модели, презентере и модели представления
-- “Ядро” калькулятора в виде алгоритма формирования и вычисления польской нотации и различных вычислительных функций подключить в виде динамической библиотеки на C/C++ из проектов SmartCalc v1.0 или SmartCalc v2.0
-- Модель должна представлять собой "Ядро" с оберткой на языке Go
-- В модель должны быть вынесены все функциональные возможности калькулятора таким образом, чтобы в будущем ее можно было использовать без остальных слоев
-- Подготовить полное покрытие unit-тестами методов, находящихся в слое модели
-- В приложении должен быть реализован раздел справки с описанием интерфейса программы в произвольной форме
-- Программа должна хранить историю операций, позволять загружать выражения из истории и очищать историю целиком
-- История должна сохраняться между запусками приложения
-- На вход программы могут подаваться как целые числа, так и вещественные числа, записанные и через точку, и в экспоненциальной форме записи
-- Вычисление должно производится после полного ввода вычисляемого выражения и нажатия на символ `=`
-- Вычисление произвольных скобочных арифметических выражений в инфиксной нотации
-- Вычисление произвольных скобочных арифметических выражений в инфиксной нотации с подстановкой значения переменной _x_ в виде числа
-- Построение графика функции, заданной с помощью выражения в инфиксной нотации с переменной _x_  (с координатными осями, отметкой используемого масштаба и сеткой с адаптивным шагом)
-    - Не требуется предоставлять пользователю возможность менять масштаб
-- Область определения и область значения функций ограничиваются по крайней мере числами от -1000000 до 1000000
-    - Для построения графиков функции необходимо дополнительно указывать отображаемые область определения и область значения
-- Проверяемая точность дробной части - минимум 7 знаков после запятой
-- У пользователя должна быть возможность ввода до 255 символов
-- Скобочные арифметические выражения в инфиксной нотации должны поддерживать следующие арифметические операции и математические функции:
-    - **Арифметические операторы**:
+- The program must be developed in Go 1.19.2
+- The program code must be located in the src folder
+- You must stick to Google Code Style when writing code
+- You need to develop a desktop application
+- Prepare the installer, which will install the application to the system with the standard settings (installation path, creating a shortcut)
+- Prepare an implementation with a graphical user interface for Mac OS, based on any GUI library or framework (GUI layer implementation in HTML/CSS/JS is acceptable)
+- The program must be implemented using the MVVM or MVP pattern, and
+  - there should be no business logic code in the view code
+  - there must be no interface code in the model, presenter and view model
+- The "core" of the calculator in the form of an algorithm for the formation and calculation of the Polish notation and various computational functions connect as a dynamic library in C/C++ from the SmartCalc v1.0 or SmartCalc v2.0 projects
+- The model should be a "core" with a wrapper in Go
+- The model must have all the calculator's functionality so that it can be used in the future without the other layers
+- Prepare full coverage of methods in the model layer with unit tests
+- The application should have a help section with a description of the program interface in random form
+- The program must save the history of operations, allow loading expressions from the history and clear the entire history
+- History must be saved between runs of the application
+- Both integers and real numbers, written either via a point or in exponential form, can be input to the program
+- Calculation should be performed after the complete entry of the calculated expression and pressing the symbol `=`
+- Calculation of arbitrary bracketed arithmetic expressions in infix notation
+- Calculation of arbitrary bracketed arithmetic expressions in infix notation with substitution of _x_ variable as a number
+- Plotting a function defined using an expression in infix notation with the variable _x_ (with coordinate axes, scale marker, and grid with adaptive step)
+  - It is not necessary to provide the user with the ability to change the scale
+- The range of definition and the range of value of the functions are at least limited to numbers from -1000000 to 1000000
+- To plot a function it is necessary to additionally specify the displayed area of definition and area of value
+- Checked accuracy of the fractional part is at least 7 decimal places
+- The user must be able to enter up to 255 characters
+- Bracketed arithmetic expressions in infix notation must support the following arithmetic operations and mathematical functions:
+  - **Arithmetic operators**:
 
-      | Название оператора | Инфиксная нотация <br /> (Классическая) | Префиксная нотация <br /> (Польская нотация) |  Постфиксная нотация <br /> (Обратная польская нотация) |
+      | Operator name | Infix Notation <br />(Classic) | Prefix notation <br /> (Polish notation) | Postfix notation <br />(Reverse Polish notation) |
       | ------ | ------ | ------ | ------ |
-      | Скобки | (a + b) | (+ a b) | a b + |
-      | Сложение | a + b | + a b | a b + |
-      | Вычитание | a - b | - a b | a b - |
-      | Умножение | a * b | * a b | a b * |
-      | Деление | a / b | / a b | a b \ |
-      | Возведение в степень | a ^ b | ^ a b | a b ^ |
-      | Остаток от деления | a mod b | mod a b | a b mod |
-      | Унарный плюс | +a | +a | a+ |
-      | Унарный минус | -a | -a | a- |
+      | Parentheses | (a + b) | (+ a b) | a b + |
+      | Addition | a + b | + a b | a b + |
+      | Subtraction | a - b | - a b | a b - |
+      | Multiplication | a * b | * a b | a b * |
+      | Division| a / b | / a b | a b \ |
+      | Rasing to the power | a ^ b | ^ a b | a b ^ |
+      | Remainder of division | a mod b | mod a b | a b mod |
+      | Unary plus | +a | +a | a+ |
+      | Unary minus | -a | -a | a- |
 
-      >Обратите внимание, что оператор умножения содержит обязательный знак `*`. Обработка выражения с опущенным знаком `*` является необязательной и остается на усмотрение разработчика
+      >Please note that the multiplication operator contains a mandatory `*` sign. Processing an expression with the `*` sign omitted is optional and left to the developer's discretion
 
-    - **Функции**:
+      | Function description | Function |
+      | ---------------- | ------- |
+      | Calculates cosine | cos(x) |
+      | Calculates sine | sin(x) |
+      | Calculates tangent | tan(x) |
+      | Calculates arc cosine | acos(x) |
+      | Calculates the arcsine | asin(x) |
+      | Calculates arctangent | atan(x) |
+      | Calculates square root | sqrt(x) |
+      | Calculates natural logarithm | ln(x) |
+      | Calculates decimal logarithm | log(x) |
 
-      | Описание функции | Функция |   
-      | ---------------- | ------- |  
-      | Вычисляет косинус | cos(x) |   
-      | Вычисляет синус | sin(x) |  
-      | Вычисляет тангенс | tan(x) |  
-      | Вычисляет арккосинус | acos(x) | 
-      | Вычисляет арксинус | asin(x) | 
-      | Вычисляет арктангенс | atan(x) |
-      | Вычисляет квадратный корень | sqrt(x) |
-      | Вычисляет натуральный логарифм | ln(x) | 
-      | Вычисляет десятичный логарифм | log(x) |
+## Part 2. Bonus. Loan сalculator
 
-## Part 2. Дополнительно. Кредитный калькулятор
+Provide a special mode "loan calculator" (you can take websites like banki.ru and calcus.ru as an example):
 
-Предусмотреть специальный режим "кредитный калькулятор" (за образец можно взять сайты banki.ru и calcus.ru):
-- Вход: общая сумма кредита, срок, процентная ставка, тип (аннуитетный, дифференцированный)
-- Выход: ежемесячный платеж, переплата по кредиту, общая выплата
+- Input: total loan amount, term, interest rate, type (annuity, differentiated)
+- Output: monthly payment, overpayment for the loan, total repayment
 
-## Part 3. Дополнительно. Депозитный калькулятор
+## Part 3. Bonus. Deposit calculator
 
-Предусмотреть специальный режим "калькулятор доходности вкладов" (за образец можно взять сайты banki.ru и calcus.ru):
-- Вход: сумма вклада, срок размещения, процентная ставка, налоговая ставка, периодичность выплат, капитализация процентов, список пополнений, список частичных снятий
-- Выход: начисленные проценты, сумма налога, сумма на вкладе к концу срока
+Provide a special mode "deposit calculator" (you can take websites like banki.ru and calcus.ru as an example):
 
-## Part 4. Дополнительно. Конфигурация и логирование
+- Input: deposit amount, deposit term, interest rate, tax rate, periodicity of payments, capitalization of interest, list of additions, list of partial withdrawals
+- Output: accrued interest, tax amount, amount on deposit by the end of the term
 
-Добавить в приложение настройки:
-- Добавить считывание настроек из файла конфигурации при запуске программы
-- Вынести в файл конфигурации от 3 параметров на выбор, например цвет заднего фона, размер шрифта и т. д.
-- Добавить описание редактируемых параметров в справку
+## Part 4. Bonus. Configuration and logging
 
-Добавить в приложение логирование:
-- В логах хранить историю операций
-- Логи сохранять в папку logs, по одному файлу на период ротации
-- Должна быть возможность настройки периода ротации логов (час/день/месяц)
-- Файлы должны быть названы в соответствии со следующим шаблоном: `logs_dd-MM-yy-hh-mm-ss` (указывается время создания файла)
+Add settings to the application:
 
-## Part 5. Дополнительно. Кроссплатформенность
+- Add reading of settings from configuration file when the program runs
+- Include in the configuration file 3 or more parameters to choose from, such as background color, font size, etc.
+- Add descriptions of editable parameters to help
 
-Сделать приложение кроссплатформенным:
-- Добавить поддержу ОС Linux
-- Добавить поддержку ОС Windows
-- Установщик также должен быть доступен под ОС Linux и Windows (допустимо использование нескольких разных установщиков)
+Add logging to the application:
+
+- Store operation history in logs
+- Save logs in the logs folder, one file per rotation period
+- It should be possible to set the period of logs rotation (hour/day/month)
+- Files must be named according to the following pattern: `logs_dd-MM-yy-hh-mm-ss` (the time of file creation)
+
+## Part 5. Bonus. Cross-platform
+
+Make your application cross-platform:
+
+- Add support for Linux
+- Add support for Windows
+- The installer should also be available for Linux and Windows (several different installers are allowed)
+
+
+## Chapter IV
+
+John finished the calculator without too much trouble. He has been writing in Go for a long time, so he quickly put together a simple desktop application. The other guys seemed to be finishing their work, too. \
+As soon as everyone had finished their work, new messages from an anonymous person popped up on their phones:
+
+> Thank you. I see you all did well. That's great, even though the algorithms predicted it from the beginning. Please set up a secure connection to the server specified in the following message and connect to the specified chat room. There we will be able to talk freely and calmly. I also have some special information for Thomas and John regarding your friend, Seb. I will expect you in the chat room!
