@@ -1,13 +1,13 @@
 package controller
 
 import (
-	calculator "calc/Calculator"
+	"calc/calculator"
 	"fmt"
 	"log"
 )
 
 // проверка баланса скобок
-func CheckBrackets(str string) bool {
+func checkBrackets(str string) bool {
 	var stack []string
 	for _, char := range str {
 		lenght := len(stack) - 1
@@ -36,7 +36,7 @@ func CheckBrackets(str string) bool {
 }
 
 // проверка на наличие унарных операций -2 => 0-2
-func CheckUnary(str string) string {
+func checkUnary(str string) string {
 
 	return str
 }
@@ -48,8 +48,8 @@ func StartCheck(str string) (rez float64) {
 		if str[lenght] == '=' {
 			str = str[:lenght]
 		}
-		if CheckBrackets(str) {
-			str = CheckUnary(str) // to do this func !!!
+		if checkBrackets(str) {
+			str = checkUnary(str) // to do this func !!!
 			rez = calculator.StartCalculate(str)
 			break
 		} else {

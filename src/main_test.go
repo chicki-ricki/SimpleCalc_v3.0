@@ -1,23 +1,24 @@
-package controller
+package main
 
 import (
+	"calc/controller"
 	"testing"
 )
 
 var (
 	testCases = []struct {
 		val    string
-		expect bool
+		expect float64
 	}{
-		{"({[]})", true},
-		{"({}))", false},
-		{"({)}", false},
+		{"5*6+(2-9)=", 23},
+		{"6+3*(1+4*5)*2=", 132},
+		{"1/2", 0.5},
 	}
 )
 
-func TestCheckBrackets(t *testing.T) {
+func TestMain(t *testing.T) {
 	for _, testCase := range testCases {
-		actual := checkBrackets(testCase.val)
+		actual := controller.StartCheck(testCase.val)
 		if actual != testCase.expect {
 			t.Errorf("Result was incorrect, expected: %v, actual: %v", testCase.expect, actual)
 		}
