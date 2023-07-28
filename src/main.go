@@ -1,12 +1,12 @@
 package main
 
 import (
-	"calculator_v3_0/SmartCalc_v2_0"
+	"calc/controller"
 	"fmt"
 )
 
 func main() {
-	stack := "({})"
-	rez := SmartCalc_v2_0.StartCalculate(stack)
+	enter := "654+3*(1+4*5)*2="
+	rez := controller.StartCheck(enter)
 	fmt.Println("rez in main:", rez)
 }
