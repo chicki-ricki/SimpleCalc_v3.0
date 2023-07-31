@@ -4,6 +4,7 @@ import (
 	"calc/calculator"
 	"fmt"
 	"log"
+	"strings"
 )
 
 // проверка баланса скобок
@@ -37,8 +38,21 @@ func checkBrackets(str string) bool {
 
 // проверка на наличие унарных операций -2 => 0-2
 func checkUnary(str string) string {
-
-	return str
+	s := strings.TrimSpace(str)
+	for i, char := range s {
+		if i == 0 && char == '-' {
+			tmp := s
+			s = "0"
+			s += tmp
+		} else if char == '(' {
+			tmp := s
+			tmp1 := strings.TrimSpace(tmp[i+1:])
+			s = tmp[0 : i+1]
+			s += "0"
+			s += tmp1
+		}
+	}
+	return s
 }
 
 func StartCheck(str string) (rez float64) {
@@ -49,7 +63,7 @@ func StartCheck(str string) (rez float64) {
 			str = str[:lenght]
 		}
 		if checkBrackets(str) {
-			str = checkUnary(str) // to do this func !!!
+			str = checkUnary(str)
 			rez = calculator.StartCalculate(str)
 			break
 		} else {
