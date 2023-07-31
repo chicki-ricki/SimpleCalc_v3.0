@@ -15,7 +15,8 @@ func main() {
 
 	// enter := " 5+(-2+3)"
 	// enter := " 5+( -2+3)"
-	enter := " -1.5+(-1.5)" // wrong answer!!!
+	// enter := " 1.5+1.5"
+	enter := " -1.5+(-1.5)"
 	// enter := "1,23e+10 + 1,23e+10" // don't work!!!
 	// enter := "2.4691357802e+10 - 2.4691357802e+10" // don't work!!!
 	// enter := "-2 + 3" // don't work!!!

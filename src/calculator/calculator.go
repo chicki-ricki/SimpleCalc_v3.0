@@ -8,11 +8,12 @@ import (
 )
 
 func strToArr(str string) []string {
+	// fmt.Println("enter str in strToArr:", str)
 	lenght := len(str)
 	strArr := make([]string, lenght+2)
 	num := 0
 	for i := 0; i < lenght; i++ {
-		if str[i] >= 48 && str[i] <= 57 {
+		if str[i] >= 48 && str[i] <= 57 || str[i] == '.' {
 			strArr[num] += string(str[i])
 		} else {
 			if str[i] == '=' {
@@ -151,6 +152,9 @@ func calculate(expression []string) float64 {
 func StartCalculate(str string) (rez float64) {
 	rez = -1.0
 	strArr := strToArr(str)
+	// for _, val := range strArr {
+	// 	fmt.Println("val: ", val)
+	// }
 	notation := toPolandNotation(strArr)
 	rez = calculate(notation)
 	return rez

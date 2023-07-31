@@ -46,9 +46,9 @@ func checkUnary(str string) string {
 			s += tmp
 		} else if char == '(' {
 			tmp := s
-			tmp1 := strings.TrimSpace(tmp[i+1:])
-			s = tmp[0 : i+1]
+			s = tmp[0 : i+2]
 			s += "0"
+			tmp1 := strings.TrimSpace(tmp[i+2:])
 			s += tmp1
 		}
 	}
