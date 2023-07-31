@@ -8,12 +8,16 @@ import (
 )
 
 func strToArr(str string) []string {
+	str = strings.ToLower(str)
 	// fmt.Println("enter str in strToArr:", str)
 	lenght := len(str)
 	strArr := make([]string, lenght+2)
 	num := 0
 	for i := 0; i < lenght; i++ {
-		if str[i] >= 48 && str[i] <= 57 || str[i] == '.' {
+		if str[i] >= 48 && str[i] <= 57 || str[i] == '.' || (strings.Contains(str[i:], "e") && strings.Contains(str[i:], "+")) || (strings.Contains(str[i-1:], "e") && strings.Contains(str[i-1:], "+")) {
+			if strings.Contains(strArr[num], "e+") && (str[i] < 48 || str[i] > 57) || strings.Contains(strArr[num], " +") {
+				num++
+			}
 			strArr[num] += string(str[i])
 		} else {
 			if str[i] == '=' {
@@ -23,6 +27,9 @@ func strToArr(str string) []string {
 			strArr[num] += string(str[i])
 			num++
 		}
+	}
+	for i, val := range strArr {
+		strArr[i] = strings.TrimSpace(val)
 	}
 	return strArr
 }
@@ -109,7 +116,7 @@ func calculate(expression []string) float64 {
 	for _, val := range expression {
 		if strings.Contains(operators, val) {
 			if len(stack) < 2 {
-				log.Println("Too few arguments")
+				// log.Println("Too few arguments")
 				break
 			}
 			lenght := len(stack)
@@ -156,6 +163,7 @@ func StartCalculate(str string) (rez float64) {
 	// 	fmt.Println("val: ", val)
 	// }
 	notation := toPolandNotation(strArr)
+	// fmt.Println("notation:", notation)
 	rez = calculate(notation)
 	return rez
 }
