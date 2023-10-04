@@ -44,19 +44,30 @@ func checkUnary(str string) string {
 	s = strings.ToLower(str)
 
 	// fmt.Printf("checkUnary|s=%s|\n", s)
-	for i, char := range s {
+	// for i, char := range s {
+	for _, char := range s {
+		// if len(retStr) > 0 {
+		// 	fmt.Println("checkUnary|char:", string(char))
+		// 	fmt.Println("checkUnary|retStr[len(retStr):-2]:", retStr[len(retStr)-2:], "len:", len(retStr))
+		// } else {
+		// 	fmt.Println("checkUnary|char:", string(char))
+		// }
+		if char == ' ' {
+			continue
+		}
 		if char == ')' || char == '(' {
 			retStr += " " + string(char) + " "
-		} else if unicode.IsDigit(char) || unicode.IsLetter(char) || char == '.' || retStr[len(retStr)-1:] == "e" { //|| char == 'e' || char == 'E' {
+		} else if unicode.IsDigit(char) || unicode.IsLetter(char) || char == '.' || (len(retStr) > 1 && retStr[len(retStr)-1:] == "e") {
 			retStr += string(char)
-		} else if i == 0 && (char == '-' || char == '+') {
+		} else if len(retStr) == 0 && (char == '-' || char == '+') {
 			retStr += "0 " + string(char) + " "
 			// fmt.Println("retStr += \"0 \" + string(char)|", retStr)
-		} else if char == '(' && (s[i+1] == '-' || s[i+1] == '+') {
-			retStr += string(char) + " 0 "
+		} else if (char == '+' || char == '-') && (len(retStr) > 1 && retStr[len(retStr)-2:len(retStr)-1] == "(") {
+			retStr += " 0 " + string(char) + " "
 		} else if char == '+' || char == '-' || char == '*' || char == '/' {
 			retStr += " " + string(char) + " "
-		} else if char != ' ' {
+		} else { //if char != ' ' {
+			fmt.Println("checkUnary|else|char:", string(char))
 			retStr += string(char) + " "
 		}
 	}
@@ -72,10 +83,6 @@ func StartCheck(str string) (rez float64) {
 			str = str[:lenght]
 		}
 		if checkBrackets(str) {
-			// tokens := strings.Fields(str)
-			// for _, val := range tokens {
-			// 	fmt.Println("token:", val)
-			// }
 			str = checkUnary(str)
 			// fmt.Printf("StartCheck|str after checkUnary=%s|\n", str)
 			rez = calculator.StartCalculate(str)

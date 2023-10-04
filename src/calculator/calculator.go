@@ -8,76 +8,6 @@ import (
 	"strings"
 )
 
-func strToArr(str string) []string {
-	// str += " "
-	// str = strings.ToLower(str)
-	fmt.Println("enter str in strToArr:", str)
-	arr := strings.Fields(str)
-	// for _, arrVal := range arr {
-	// 	fmt.Println("fields:", arrVal)
-	// }
-	// lenght := len(str)
-	// strArr := make([]string, lenght)
-	// num := 0
-	// for i := 0; i < lenght; i++ {
-	// 	/*
-	// 		if str[i] >= '0' && str[i] <= '9' || str[i] == '.' || (strings.Contains(str[i:], "e") && strings.Contains(str[i:], "+")) || (i > 1 && strings.Contains(str[i-1:], "e") && strings.Contains(str[i-1:], "+")) {
-	// 			if strings.Contains(strArr[num], "e+") && (str[i] < 48 || str[i] > 57) || strings.Contains(strArr[num], " +") || str[i] == ' ' {
-	// 				num++
-	// 			}
-	// 			strArr[num] += string(str[i])
-	// 		} else {
-	// 			if str[i] == '=' {
-	// 				break
-	// 			}
-	// 			num++
-	// 			strArr[num] += string(str[i])
-	// 			num++
-	// 		}
-	// 	*/
-	// 	/*
-	// 	fmt.Println("strToArr|string(str[", i, "]):", string(str[i]))
-	// 	if str[i] == '(' || str[i] == ')' || str[i] == '{' || str[i] == '}' ||
-	// 		str[i] == '[' || str[i] == ']' || str[i] == '*' || str[i] == '/' ||
-	// 		// str[i] == '^' || ((str[i] == '+' || str[i] == '-') && str[i+1] == ' ') {
-	// 		str[i] == '^' || (str[i] == '+' || str[i] == '-') {
-	// 		num++
-	// 		strArr[num] += string(str[i])
-	// 		num++
-	// 	} else if (str[i] >= 'a' && str[i] < 'e') || (str[i] > 'e' && str[i] <= 'z') {
-	// 		strArr[num] += string(str[i])
-	// 	} else {
-	// 		strArr[num] += string(str[i])
-
-	// 	}
-	// }
-	// j := 0
-	// for i, val := range strArr {
-	// 	strArr[i] = strings.TrimSpace(val)
-	// 	if strArr[i] != "" {
-	// 		// arr[j] = strArr[i]
-	// 		j++
-	// 	}
-	// }
-	// arr := make([]string, j)
-	// j = 0
-	// for i, val := range strArr {
-	// 	strArr[i] = strings.TrimSpace(val)
-	// 	if strArr[i] != "" {
-	// 		arr[j] = strArr[i]
-	// 		j++
-	// 	}
-	// }
-	// fmt.Println("strToArr|arr:", arr)
-	// // return strArr
-	// return arr
-	// // fmt.Println("strToArr|strArr:", strArr)
-	// // return strArr
-	// */
-	fmt.Println("strToArr|arr:", arr)
-	return arr
-}
-
 func toPolandNotation(strArr []string) (expression []string) {
 	var stack []string
 	precedence := map[string]int{
@@ -167,10 +97,10 @@ func calculate(expression []string) float64 {
 	unaryop := "acosasinatansqrtlnlog"
 	var stack []float64
 
-	fmt.Println("expression:", expression)
+	// fmt.Println("expression:", expression)
 	for _, val := range expression {
-		fmt.Println("expression val:", val)
-		fmt.Println("strings.Contains(operators, ", val, "):", strings.Contains(operators, val))
+		// fmt.Println("expression val:", val)
+		// fmt.Println("strings.Contains(operators, ", val, "):", strings.Contains(operators, val))
 		if strings.Contains(operators, val) {
 			if len(stack) < 2 {
 				if strings.Contains(unaryop, val) {
@@ -186,22 +116,21 @@ func calculate(expression []string) float64 {
 					continue
 				} else {
 					// log.Println("Too few arguments")
+					fmt.Println("calculate|val in else:", val)
 					fmt.Println("calculate|len(stack):", len(stack))
-					fmt.Println("stack in if:", stack)
+					fmt.Println("calculate|stack in if:", stack)
 					break
 				}
 			}
 			lenght := len(stack)
-			fmt.Println("stack1: ", stack)
+			// fmt.Println("stack1: ", stack)
 			n1 := stack[lenght-1]
-			fmt.Println("calculate|n1:", n1)
-			// stack[lenght-1] = ""
+			// fmt.Println("calculate|n1:", n1)
 			stack = stack[:lenght-1]
 			lenght = len(stack)
-			fmt.Println("stack2: ", stack)
+			// fmt.Println("stack2: ", stack)
 			n2 := stack[lenght-1]
-			fmt.Println("calculate|n2:", n2)
-			// stack[lenght-1] = ""
+			// fmt.Println("calculate|n2:", n2)
 			stack = stack[:lenght-1]
 			var temp float64
 			switch {
@@ -224,10 +153,10 @@ func calculate(expression []string) float64 {
 			case val == "cos":
 				stack = append(stack, n2)
 				temp = math.Cos(n1)
-			// case val == "sin":
-			// 	stack = append(stack, n2)
-			// 	temp = math.Sin(n1)
-			// 	fmt.Println("sin(", n1, "):", temp)
+			case val == "sin":
+				stack = append(stack, n2)
+				temp = math.Sin(n1)
+				// fmt.Println("sin(", n1, "):", temp)
 			case val == "tan":
 				stack = append(stack, n2)
 				temp = math.Tan(n1)
@@ -254,23 +183,26 @@ func calculate(expression []string) float64 {
 		} else {
 			if num, err := strconv.ParseFloat(val, 64); err == nil {
 				stack = append(stack, num)
-				fmt.Println("Num of (", val, "):", num)
+				// fmt.Println("calculate|Num of (", val, "):", num)
+				// fmt.Println("calculate|stack after strconv.Parse:", stack)
 			} else {
 				log.Println("Error in strconv:", err)
 			}
 		}
+		// fmt.Println("calculate|stack after if:", stack, ", val:", val)
 	}
 	return stack[0]
 }
 
 func StartCalculate(str string) (rez float64) {
 	rez = -1.0
-	strArr := strToArr(str)
-	for _, val := range strArr {
-		fmt.Println("StartCalculate|val: ", val)
-	}
+	// strArr := strToArr(str)
+	strArr := strings.Fields(str)
+	// for _, val := range strArr {
+	// 	fmt.Println("StartCalculate|val: ", val)
+	// }
 	notation := toPolandNotation(strArr)
-	fmt.Println("notation:", notation)
+	// fmt.Println("notation:", notation)
 	rez = calculate(notation)
 	return rez
 }
