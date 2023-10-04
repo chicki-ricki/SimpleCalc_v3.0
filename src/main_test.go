@@ -1,5 +1,8 @@
 package main
 
+// запуск всех тестов:
+// go test ./...
+
 import (
 	"calc/controller"
 	"testing"

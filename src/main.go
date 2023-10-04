@@ -24,18 +24,15 @@ func main() {
 	enter := "(5.2e+4 + sin(0.1) * 1000) + (-0.2)" //52099.6
 
 	rez := controller.StartCheck(enter)
-	fmt.Println("rez in main:", rez)
-	fmt.Printf("rez in main round: %.1f\n", rez)
+	fmt.Println("rez expression in main:", rez)
+	fmt.Printf("rez expression in main round: %.1f\n", rez)
 
-	// expression, err := govaluate.NewEvaluableExpression(enter)
-	// if err != nil {
-	// 	log.Fatalf("Error with expression: %s\n", err)
-	// }
-	// result, err := expression.Evaluate(nil)
-	// fmt.Println("govaluate.rezult: ", result)
-
-	// // // fmt.Println(0.52e+4)
-	// // rez := "last"
-	// // fmt.Println(rez[len(rez)-1:])
-	// // fmt.Println(rez[len(rez)-2 : len(rez)-1])
+	// equation := "2*x + 5"
+	// equation := "(2*x + 5))"
+	// equation := "x     -4"
+	equation := "(5.2e+4 + sin(0.1) * x) + (-0.2)"
+	start := -5
+	end := 5
+	rezEq := controller.StartEquation(equation, start, end)
+	fmt.Println("equation slice of structs:", rezEq)
 }
