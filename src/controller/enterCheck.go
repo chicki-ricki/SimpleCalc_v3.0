@@ -42,16 +42,7 @@ func checkUnary(str string) string {
 	var retStr string
 	s := strings.TrimSpace(str)
 	s = strings.ToLower(str)
-
-	// fmt.Printf("checkUnary|s=%s|\n", s)
-	// for i, char := range s {
 	for _, char := range s {
-		// if len(retStr) > 0 {
-		// 	fmt.Println("checkUnary|char:", string(char))
-		// 	fmt.Println("checkUnary|retStr[len(retStr):-2]:", retStr[len(retStr)-2:], "len:", len(retStr))
-		// } else {
-		// 	fmt.Println("checkUnary|char:", string(char))
-		// }
 		if char == ' ' {
 			continue
 		}
@@ -61,17 +52,14 @@ func checkUnary(str string) string {
 			retStr += string(char)
 		} else if len(retStr) == 0 && (char == '-' || char == '+') {
 			retStr += "0 " + string(char) + " "
-			// fmt.Println("retStr += \"0 \" + string(char)|", retStr)
 		} else if (char == '+' || char == '-') && (len(retStr) > 1 && retStr[len(retStr)-2:len(retStr)-1] == "(") {
 			retStr += " 0 " + string(char) + " "
 		} else if char == '+' || char == '-' || char == '*' || char == '/' {
 			retStr += " " + string(char) + " "
-		} else { //if char != ' ' {
-			fmt.Println("checkUnary|else|char:", string(char))
+		} else {
 			retStr += string(char) + " "
 		}
 	}
-	// fmt.Println("checkUnary|str return: ", retStr)
 	return retStr
 }
 
@@ -84,7 +72,6 @@ func StartCheck(str string) (rez float64) {
 		}
 		if checkBrackets(str) {
 			str = checkUnary(str)
-			// fmt.Printf("StartCheck|str after checkUnary=%s|\n", str)
 			rez = calculator.StartCalculate(str)
 			break
 		} else {

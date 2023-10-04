@@ -1,7 +1,6 @@
 package calculator
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"strconv"
@@ -97,10 +96,7 @@ func calculate(expression []string) float64 {
 	unaryop := "acosasinatansqrtlnlog"
 	var stack []float64
 
-	// fmt.Println("expression:", expression)
 	for _, val := range expression {
-		// fmt.Println("expression val:", val)
-		// fmt.Println("strings.Contains(operators, ", val, "):", strings.Contains(operators, val))
 		if strings.Contains(operators, val) {
 			if len(stack) < 2 {
 				if strings.Contains(unaryop, val) {
@@ -110,27 +106,19 @@ func calculate(expression []string) float64 {
 					switch {
 					case val == "sin":
 						temp := math.Sin(n1)
-						fmt.Println("sin(", n1, "):", temp)
 						stack = append(stack, temp)
 					}
 					continue
 				} else {
-					// log.Println("Too few arguments")
-					fmt.Println("calculate|val in else:", val)
-					fmt.Println("calculate|len(stack):", len(stack))
-					fmt.Println("calculate|stack in if:", stack)
+					log.Println("Too few arguments")
 					break
 				}
 			}
 			lenght := len(stack)
-			// fmt.Println("stack1: ", stack)
 			n1 := stack[lenght-1]
-			// fmt.Println("calculate|n1:", n1)
 			stack = stack[:lenght-1]
 			lenght = len(stack)
-			// fmt.Println("stack2: ", stack)
 			n2 := stack[lenght-1]
-			// fmt.Println("calculate|n2:", n2)
 			stack = stack[:lenght-1]
 			var temp float64
 			switch {
@@ -156,7 +144,6 @@ func calculate(expression []string) float64 {
 			case val == "sin":
 				stack = append(stack, n2)
 				temp = math.Sin(n1)
-				// fmt.Println("sin(", n1, "):", temp)
 			case val == "tan":
 				stack = append(stack, n2)
 				temp = math.Tan(n1)
@@ -183,26 +170,18 @@ func calculate(expression []string) float64 {
 		} else {
 			if num, err := strconv.ParseFloat(val, 64); err == nil {
 				stack = append(stack, num)
-				// fmt.Println("calculate|Num of (", val, "):", num)
-				// fmt.Println("calculate|stack after strconv.Parse:", stack)
 			} else {
 				log.Println("Error in strconv:", err)
 			}
 		}
-		// fmt.Println("calculate|stack after if:", stack, ", val:", val)
 	}
 	return stack[0]
 }
 
 func StartCalculate(str string) (rez float64) {
 	rez = -1.0
-	// strArr := strToArr(str)
 	strArr := strings.Fields(str)
-	// for _, val := range strArr {
-	// 	fmt.Println("StartCalculate|val: ", val)
-	// }
 	notation := toPolandNotation(strArr)
-	// fmt.Println("notation:", notation)
 	rez = calculate(notation)
 	return rez
 }
