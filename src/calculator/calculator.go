@@ -97,6 +97,7 @@ func calculate(expression []string) float64 {
 	var stack []float64
 
 	for _, val := range expression {
+		var temp float64
 		if strings.Contains(operators, val) {
 			if len(stack) < 2 {
 				if strings.Contains(unaryop, val) {
@@ -104,10 +105,26 @@ func calculate(expression []string) float64 {
 					n1 := stack[lenght-1]
 					stack = stack[:lenght-1]
 					switch {
+					case val == "cos":
+						temp = math.Cos(n1)
 					case val == "sin":
-						temp := math.Sin(n1)
-						stack = append(stack, temp)
+						temp = math.Sin(n1)
+					case val == "tan":
+						temp = math.Tan(n1)
+					case val == "acos":
+						temp = math.Acos(n1)
+					case val == "asin":
+						temp = math.Asin(n1)
+					case val == "atan":
+						temp = math.Atan(n1)
+					case val == "sqrt":
+						temp = math.Sqrt(n1)
+					case val == "ln":
+						temp = math.Log(n1)
+					case val == "log":
+						temp = math.Log10(n1)
 					}
+					stack = append(stack, temp)
 					continue
 				} else {
 					log.Println("Too few arguments")
@@ -120,7 +137,7 @@ func calculate(expression []string) float64 {
 			lenght = len(stack)
 			n2 := stack[lenght-1]
 			stack = stack[:lenght-1]
-			var temp float64
+			// var temp float64
 			switch {
 			case val == "+":
 				temp = n2 + n1
