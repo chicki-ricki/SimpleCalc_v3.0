@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"unicode"
 )
 
 // проверка баланса скобок
@@ -38,21 +39,29 @@ func checkBrackets(str string) bool {
 
 // проверка на наличие унарных операций -2 => 0-2
 func checkUnary(str string) string {
+	var retStr string
 	s := strings.TrimSpace(str)
+	s = strings.ToLower(str)
+
+	// fmt.Printf("checkUnary|s=%s|\n", s)
 	for i, char := range s {
-		if i == 0 && char == '-' {
-			tmp := s
-			s = "0"
-			s += tmp
-		} else if char == '(' {
-			tmp := s
-			s = tmp[0 : i+2]
-			s += "0"
-			tmp1 := strings.TrimSpace(tmp[i+2:])
-			s += tmp1
+		if char == ')' || char == '(' {
+			retStr += " " + string(char) + " "
+		} else if unicode.IsDigit(char) || unicode.IsLetter(char) || char == '.' || retStr[len(retStr)-1:] == "e" { //|| char == 'e' || char == 'E' {
+			retStr += string(char)
+		} else if i == 0 && (char == '-' || char == '+') {
+			retStr += "0 " + string(char) + " "
+			// fmt.Println("retStr += \"0 \" + string(char)|", retStr)
+		} else if char == '(' && (s[i+1] == '-' || s[i+1] == '+') {
+			retStr += string(char) + " 0 "
+		} else if char == '+' || char == '-' || char == '*' || char == '/' {
+			retStr += " " + string(char) + " "
+		} else if char != ' ' {
+			retStr += string(char) + " "
 		}
 	}
-	return s
+	// fmt.Println("checkUnary|str return: ", retStr)
+	return retStr
 }
 
 func StartCheck(str string) (rez float64) {
@@ -63,7 +72,12 @@ func StartCheck(str string) (rez float64) {
 			str = str[:lenght]
 		}
 		if checkBrackets(str) {
+			// tokens := strings.Fields(str)
+			// for _, val := range tokens {
+			// 	fmt.Println("token:", val)
+			// }
 			str = checkUnary(str)
+			// fmt.Printf("StartCheck|str after checkUnary=%s|\n", str)
 			rez = calculator.StartCalculate(str)
 			break
 		} else {
