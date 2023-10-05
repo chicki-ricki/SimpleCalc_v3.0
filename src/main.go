@@ -21,7 +21,10 @@ func main() {
 	// enter := "-2 + 3"
 	// enter := "sin(0.35) + 1" //1.34
 	// enter := "    tan   (   1     )" //1.56
-	enter := "(5.2e+4 + sin(0.1) * 1000) + (-0.2)" //52099.6
+	// enter := "(5.2e+4 + sin(0.1) * 1000) + (-0.2)" //52099.6
+	// enter := "-2"
+	// enter := "+5"
+	enter := "sqrt   (  +  25)"
 
 	rez := controller.StartCheck(enter)
 	fmt.Println("rez expression in main:", rez)
@@ -33,6 +36,7 @@ func main() {
 	// equation := "(5.2e+4 + sin(0.1) * x) + (-0.2)"
 	start := 0
 	end := 9
-	rezEq := controller.StartEquation(equation, start, end)
+	pixels := 10 //need 600
+	rezEq := controller.StartEquation(equation, start, end, pixels)
 	fmt.Println("equation slice of structs:", rezEq)
 }

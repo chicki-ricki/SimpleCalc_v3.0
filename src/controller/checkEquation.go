@@ -1,7 +1,10 @@
 package controller
 
 import (
+	"bufio"
+	"log"
 	"math"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -11,8 +14,8 @@ type SCoordinates struct {
 	y float64
 }
 
-func StartEquation(str string, start int, end int) []SCoordinates {
-	pixels := 10 //need 600
+func StartEquation(str string, start int, end int, pixels int) []SCoordinates {
+	// pixels := 10 //need 600
 	var delta float64
 	var deltaPixel float64
 	maxVal := math.Max(float64(start), float64(end))
@@ -30,6 +33,12 @@ func StartEquation(str string, start int, end int) []SCoordinates {
 			elem.y = y
 			ret = append(ret, elem)
 		}
+	} else {
+		log.Println("Error of brackets, please enter new expression")
+		// fmt.Scan(&str)
+		in := bufio.NewScanner(os.Stdin)
+		in.Scan()
+		str = in.Text()
 	}
 	return ret
 }

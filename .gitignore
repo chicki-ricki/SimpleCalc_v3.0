@@ -54,3 +54,4 @@ dkms.conf
 .vscode
 calc
 go.sum
+*_no.go

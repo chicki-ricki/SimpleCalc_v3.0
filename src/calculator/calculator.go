@@ -137,7 +137,6 @@ func calculate(expression []string) float64 {
 			lenght = len(stack)
 			n2 := stack[lenght-1]
 			stack = stack[:lenght-1]
-			// var temp float64
 			switch {
 			case val == "+":
 				temp = n2 + n1
