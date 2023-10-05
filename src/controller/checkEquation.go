@@ -1,36 +1,29 @@
 package controller
 
 import (
+	"math"
 	"strconv"
 	"strings"
 )
 
 type SCoordinates struct {
-	x int
+	x float64
 	y float64
 }
 
-// func convertToExpression(str string, i int) string {
-// 	var ret string
-// 	for _, val := range str {
-// 		if val == 'x' {
-// 			ret += strconv.Itoa(i)
-// 		} else {
-// 			ret += string(val)
-// 		}
-// 	}
-// 	// fmt.Println("convertToExp|ret:", ret)
-// 	return ret
-// }
-
 func StartEquation(str string, start int, end int) []SCoordinates {
-	// count := 10 //need 600
+	pixels := 10 //need 600
+	var delta float64
+	var deltaPixel float64
+	maxVal := math.Max(float64(start), float64(end))
+	minVal := math.Min(float64(start), float64(end))
+	delta = maxVal - minVal
+	deltaPixel = float64(delta) / float64(pixels-1)
 	var ret []SCoordinates
 	if checkBrackets(str) {
-		for i := start; i < end; i++ {
+		for i := 0; i < pixels; i++ {
 			var elem SCoordinates
-			x := i
-			// convertStr := convertToExpression(str, i)
+			x := minVal + float64(i)*deltaPixel
 			convertStr := strings.ReplaceAll(str, "x", strconv.Itoa(i))
 			y := StartCheck(convertStr)
 			elem.x = x

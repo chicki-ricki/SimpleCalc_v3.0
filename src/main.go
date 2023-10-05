@@ -31,8 +31,8 @@ func main() {
 	// equation := "(2*x + 5))"
 	equation := "x     -4"
 	// equation := "(5.2e+4 + sin(0.1) * x) + (-0.2)"
-	start := -5
-	end := 5
+	start := 0
+	end := 9
 	rezEq := controller.StartEquation(equation, start, end)
 	fmt.Println("equation slice of structs:", rezEq)
 }
