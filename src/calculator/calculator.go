@@ -149,7 +149,7 @@ func calculate(expression []string) (float64, error) {
 			case val == "*":
 				temp = n2 * n1
 			case val == "mod":
-				temp = math.Mod(n2, n1)
+				temp = float64(int(n2) % int(n1))
 			case val == "/":
 				if n1 == 0 {
 					err = errors.New("Error: division by zero")
