@@ -129,7 +129,6 @@ func calculate(expression []string) (float64, error) {
 					stack = append(stack, temp)
 					continue
 				} else {
-					// log.Println("Too few arguments")
 					err = errors.New("Too few arguments")
 					break
 				}
@@ -153,7 +152,6 @@ func calculate(expression []string) (float64, error) {
 				temp = math.Mod(n2, n1)
 			case val == "/":
 				if n1 == 0 {
-					// log.Println("Error: division by zero")
 					err = errors.New("Error: division by zero")
 					break
 				}
@@ -191,7 +189,6 @@ func calculate(expression []string) (float64, error) {
 			if num, err := strconv.ParseFloat(val, 64); err == nil {
 				stack = append(stack, num)
 			} else {
-				// log.Println("Error in strconv:", err)
 				err = fmt.Errorf("Error in strconv: %v", err)
 			}
 		}

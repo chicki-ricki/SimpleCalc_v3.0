@@ -24,7 +24,8 @@ func main() {
 	// enter := "(5.2e+4 + sin(0.1) * 1000) + (-0.2)" //52099.6
 	// enter := "-2"
 	// enter := "+5"
-	enter := "sqrt   (  +  25)"
+	// enter := "sqrt   (  +  25)"
+	enter := "5 ^ 2"
 
 	rez, err := controller.StartCheck(enter)
 	fmt.Println("rez expression in main:", rez, ", error:", err)
@@ -43,6 +44,4 @@ func main() {
 	var x float64 = 5
 	rezEq, err := controller.StartEquation(equation, x)
 	fmt.Println("equation result:", rezEq, ", error:", err)
-
-	// graphic.Window()
 }

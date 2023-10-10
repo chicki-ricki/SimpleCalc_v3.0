@@ -45,7 +45,8 @@ func checkUnary(str string) string {
 		if char == ' ' {
 			continue
 		}
-		if char == ')' || char == '(' {
+
+		if char == ')' || char == '(' || char == '^' {
 			retStr += " " + string(char) + " "
 		} else if unicode.IsDigit(char) || unicode.IsLetter(char) || char == '.' || (len(retStr) > 1 && retStr[len(retStr)-1:] == "e") {
 			retStr += string(char)
@@ -75,8 +76,6 @@ func StartCheck(str string) (rez float64, err error) {
 			rez, err = calculator.StartCalculate(str)
 			break
 		} else {
-			// log.Println("Error of brackets, please enter new expression")
-			// fmt.Scan(&str)
 			err = errors.New("Error of brackets, please enter new expression")
 		}
 	}
