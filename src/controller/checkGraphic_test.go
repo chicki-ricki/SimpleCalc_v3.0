@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	testCasesEquation = []struct {
+	testCasesGraphic = []struct {
 		equation string
 		start    int
 		end      int
@@ -17,9 +17,9 @@ var (
 	}
 )
 
-func TestStartEquation(t *testing.T) {
-	for _, testCase := range testCasesEquation {
-		actual := StartEquation(testCase.equation, testCase.start, testCase.end, testCase.pixels)
+func TestStartGraphic(t *testing.T) {
+	for _, testCase := range testCasesGraphic {
+		actual, _ := StartGraphic(testCase.equation, testCase.start, testCase.end, testCase.pixels)
 		if !reflect.DeepEqual(actual, testCase.expect) {
 			t.Errorf("Result was incorrect, expected: %v, actual: %v\n", testCase.expect, actual)
 		}

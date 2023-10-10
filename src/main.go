@@ -34,9 +34,14 @@ func main() {
 	// equation := "(2*x + 5))"
 	equation := "x     -4"
 	// equation := "(5.2e+4 + sin(0.1) * x) + (-0.2)"
-	start := 0
-	end := 9
+	start := -100
+	end := 100
 	pixels := 10 //need 600
-	rezEq := controller.StartEquation(equation, start, end, pixels)
-	fmt.Println("equation slice of structs:", rezEq)
+	rezGraphic, _ := controller.StartGraphic(equation, start, end, pixels)
+	fmt.Println("equation slice of structs for graphic:", rezGraphic)
+
+	rezEq := controller.StartEquation(equation)
+	fmt.Println("equation result:", rezEq)
+
+	// graphic.Window()
 }

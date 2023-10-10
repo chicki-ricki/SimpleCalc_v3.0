@@ -1,10 +1,8 @@
 package controller
 
 import (
-	"bufio"
-	"log"
+	"errors"
 	"math"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -14,7 +12,7 @@ type SCoordinates struct {
 	y float64
 }
 
-func StartEquation(str string, start int, end int, pixels int) []SCoordinates {
+func StartGraphic(str string, start int, end int, pixels int) (ret []SCoordinates, err error) {
 	// pixels := 10 //need 600
 	var delta float64
 	var deltaPixel float64
@@ -22,7 +20,7 @@ func StartEquation(str string, start int, end int, pixels int) []SCoordinates {
 	minVal := math.Min(float64(start), float64(end))
 	delta = maxVal - minVal
 	deltaPixel = float64(delta) / float64(pixels-1)
-	var ret []SCoordinates
+	// var ret []SCoordinates
 	if checkBrackets(str) {
 		for i := 0; i < pixels; i++ {
 			var elem SCoordinates
@@ -33,12 +31,15 @@ func StartEquation(str string, start int, end int, pixels int) []SCoordinates {
 			elem.y = y
 			ret = append(ret, elem)
 		}
+		return ret, nil
 	} else {
-		log.Println("Error of brackets, please enter new expression")
-		// fmt.Scan(&str)
-		in := bufio.NewScanner(os.Stdin)
-		in.Scan()
-		str = in.Text()
+		// log.Println("Error of brackets, please enter new expression")
+		// // fmt.Scan(&str)
+		// in := bufio.NewScanner(os.Stdin)
+		// in.Scan()
+		// str = in.Text()
+		err = errors.New("Error of brackets, please enter new expression")
+		return ret, err
 	}
-	return ret
+	// return ret
 }
