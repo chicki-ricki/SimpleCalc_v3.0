@@ -26,7 +26,7 @@ func main() {
 	// enter := "+5"
 	enter := "sqrt   (  +  25)"
 
-	rez := controller.StartCheck(enter)
+	rez, _ := controller.StartCheck(enter)
 	fmt.Println("rez expression in main:", rez)
 	fmt.Printf("rez expression in main round: %.1f\n", rez)
 

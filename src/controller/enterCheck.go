@@ -2,8 +2,7 @@ package controller
 
 import (
 	"calc/calculator"
-	"fmt"
-	"log"
+	"errors"
 	"strings"
 	"unicode"
 )
@@ -63,8 +62,9 @@ func checkUnary(str string) string {
 	return retStr
 }
 
-func StartCheck(str string) (rez float64) {
+func StartCheck(str string) (rez float64, err error) {
 	rez = -1.0
+	err = nil
 	for {
 		lenght := len(str) - 1
 		if str[lenght] == '=' {
@@ -75,8 +75,9 @@ func StartCheck(str string) (rez float64) {
 			rez = calculator.StartCalculate(str)
 			break
 		} else {
-			log.Println("Error of brackets, please enter new expression")
-			fmt.Scan(&str)
+			// log.Println("Error of brackets, please enter new expression")
+			// fmt.Scan(&str)
+			err = errors.New("Error of brackets, please enter new expression")
 		}
 	}
 	return
