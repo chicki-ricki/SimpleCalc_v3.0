@@ -45,9 +45,12 @@ func checkUnary(str string) string {
 		if char == ' ' {
 			continue
 		}
-
 		if char == ')' || char == '(' || char == '^' {
 			retStr += " " + string(char) + " "
+		} else if char == 'm' {
+			retStr += " " + string(char)
+		} else if char == 'd' {
+			retStr += string(char) + " "
 		} else if unicode.IsDigit(char) || unicode.IsLetter(char) || char == '.' || (len(retStr) > 1 && retStr[len(retStr)-1:] == "e") {
 			retStr += string(char)
 		} else if len(retStr) == 0 && (char == '-' || char == '+') {
