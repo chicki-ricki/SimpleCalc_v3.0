@@ -1,7 +1,8 @@
 package calculator
 
 import (
-	"log"
+	"errors"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -91,10 +92,11 @@ func toPolandNotation(strArr []string) (expression []string) {
 	return
 }
 
-func calculate(expression []string) float64 {
+func calculate(expression []string) (float64, error) {
 	operators := "+-^*/modacosasinatansqrtlnlog"
 	unaryop := "acosasinatansqrtlnlog"
 	var stack []float64
+	var err error = nil
 
 	for _, val := range expression {
 		var temp float64
@@ -127,7 +129,8 @@ func calculate(expression []string) float64 {
 					stack = append(stack, temp)
 					continue
 				} else {
-					log.Println("Too few arguments")
+					// log.Println("Too few arguments")
+					err = errors.New("Too few arguments")
 					break
 				}
 			}
@@ -150,7 +153,8 @@ func calculate(expression []string) float64 {
 				temp = math.Mod(n2, n1)
 			case val == "/":
 				if n1 == 0 {
-					log.Println("Error: division by zero")
+					// log.Println("Error: division by zero")
+					err = errors.New("Error: division by zero")
 					break
 				}
 				temp = n2 / n1
@@ -187,17 +191,18 @@ func calculate(expression []string) float64 {
 			if num, err := strconv.ParseFloat(val, 64); err == nil {
 				stack = append(stack, num)
 			} else {
-				log.Println("Error in strconv:", err)
+				// log.Println("Error in strconv:", err)
+				err = fmt.Errorf("Error in strconv: %v", err)
 			}
 		}
 	}
-	return stack[0]
+	return stack[0], err
 }
 
-func StartCalculate(str string) (rez float64) {
+func StartCalculate(str string) (rez float64, err error) {
 	rez = -1.0
 	strArr := strings.Fields(str)
 	notation := toPolandNotation(strArr)
-	rez = calculate(notation)
-	return rez
+	rez, err = calculate(notation)
+	return rez, err
 }

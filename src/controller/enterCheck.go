@@ -72,7 +72,7 @@ func StartCheck(str string) (rez float64, err error) {
 		}
 		if checkBrackets(str) {
 			str = checkUnary(str)
-			rez = calculator.StartCalculate(str)
+			rez, err = calculator.StartCalculate(str)
 			break
 		} else {
 			// log.Println("Error of brackets, please enter new expression")

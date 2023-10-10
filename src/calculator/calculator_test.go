@@ -48,8 +48,8 @@ func TestToPolandNotation(t *testing.T) {
 
 func TestCalculate(t *testing.T) {
 	for _, testCase := range testCasesCalculate {
-		actual := calculate(testCase.enter)
-		if actual != testCase.expect {
+		actual, err := calculate(testCase.enter)
+		if err == nil && actual != testCase.expect {
 			t.Errorf("Result was incorrect, exected: %v, actual: %v\n", testCase.expect, actual)
 		}
 	}

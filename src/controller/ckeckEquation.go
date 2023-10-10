@@ -14,6 +14,5 @@ func StartEquation(str string, x float64) (y float64, err error) {
 	} else {
 		err = errors.New("Error of brackets, please enter new expression")
 	}
-
 	return y, err
 }
