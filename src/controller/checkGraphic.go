@@ -25,12 +25,6 @@ func StartGraphic(str string, start int, end int, pixels int) (ret []SCoordinate
 			var elem SCoordinates
 			x := minVal + float64(i)*deltaPixel
 			convertStr := strings.ReplaceAll(str, "x", strconv.Itoa(i))
-			// y, err := StartCheck(convertStr)
-			// if err == nil {
-			// 	elem.x = x
-			// 	elem.y = y
-			// 	ret = append(ret, elem)
-			// }
 			y, _ := StartCheck(convertStr)
 			elem.x = x
 			elem.y = y

@@ -55,8 +55,8 @@ func TestCheckBrackets(t *testing.T) {
 
 func TestStartCheck(t *testing.T) {
 	for _, testCase := range testCasesStartCheck {
-		actual := StartCheck(testCase.val)
-		if actual != testCase.expect {
+		actual, err := StartCheck(testCase.val)
+		if err == nil && actual != testCase.expect {
 			t.Errorf("Result was incorrect, expected: %v, actual: %v\n", testCase.expect, actual)
 		}
 	}

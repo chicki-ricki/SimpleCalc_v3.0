@@ -26,8 +26,8 @@ func main() {
 	// enter := "+5"
 	enter := "sqrt   (  +  25)"
 
-	rez, _ := controller.StartCheck(enter)
-	fmt.Println("rez expression in main:", rez)
+	rez, err := controller.StartCheck(enter)
+	fmt.Println("rez expression in main:", rez, ", error:", err)
 	fmt.Printf("rez expression in main round: %.1f\n", rez)
 
 	// equation := "2*x + 5"
@@ -37,11 +37,12 @@ func main() {
 	start := -100
 	end := 100
 	pixels := 10 //need 600
-	rezGraphic, _ := controller.StartGraphic(equation, start, end, pixels)
-	fmt.Println("equation slice of structs for graphic:", rezGraphic)
+	rezGraphic, err := controller.StartGraphic(equation, start, end, pixels)
+	fmt.Println("equation slice of structs for graphic:", rezGraphic, ", error:", err)
 
-	rezEq := controller.StartEquation(equation)
-	fmt.Println("equation result:", rezEq)
+	var x float64 = 5
+	rezEq, err := controller.StartEquation(equation, x)
+	fmt.Println("equation result:", rezEq, ", error:", err)
 
 	// graphic.Window()
 }
