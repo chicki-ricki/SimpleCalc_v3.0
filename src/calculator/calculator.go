@@ -190,6 +190,7 @@ func calculate(expression []string) (float64, error) {
 				stack = append(stack, num)
 			} else {
 				err = fmt.Errorf("Error in strconv: %v", err)
+				break
 			}
 		}
 	}
