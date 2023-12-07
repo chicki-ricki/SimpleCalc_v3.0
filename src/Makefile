@@ -7,6 +7,7 @@ DEBDIR=./build/packages/temp/DEB
 #GOINSTALL=$(GO) install
 #GOCLEAN=$(GO) clean
 # USERDECKTOP=$${whoami}
+DMG_NAME=smartCalcApp.dmg
 
 # RUN COMMANDS
 name:
@@ -73,7 +74,7 @@ clean:
 
 # clean finished packages
 clean-package:
-	@rm -Rf ./build/packages/done/app/* ./build/packages/done/dmg/*
+	@rm -Rf ./build/packages/done/app/* ./build/packages/done/dmg/* ./build/packages/done/deb/*
 	@echo "\033[0;34mfinished packages was deleted\033[0m"
 
 # clean temp files after packages building
@@ -113,12 +114,15 @@ dmgMacOS:	app
 	mv smartCalcApp.dmg ./build/packages/done/dmg/
 
 installMacOS: app
-	hdiutil create "./build/packages/temp/smartCalcApp.dmg" -ov -volname "smartCalc" -fs HFS+ -srcfolder "./build/packages/done/smartCalc.app/"
-	hdiutil attach "./build/packages/temp/smartCalcApp.dmg"
-	cp -rf /Volumes/smartCalc/smartCalc.app /Applications
-	ln -s "/Applications/smartCalc.app" "/Users/$$(whoami)/Desktop"
-	hdiutil detach /dev/disk2s1
+# 	hdiutil create "./build/packages/temp/${DMG_NAME}" -ov -volname "smartCalc" -fs HFS+ -srcfolder "./build/packages/done/app/smartCalc.app"
+# #	device=$(hdiutil attach -readwrite -noverify -noautoopen "./build/packages/temp/${DMG_NAME}" | egrep '^/dev/' | sed 1q | awk '{print $1}')
+# #	echo "done! (device ${device})"
+# 	hdiutil attach "./build/packages/temp/${DMG_NAME}"
+# 	cp -rf /Volumes/smartCalc/smartCalc.app /Applications
+# 	ln -s "/Applications/smartCalc.app" "/Users/$$(whoami)/Desktop"
+# 	hdiutil detach /dev/disk2s1
 	make clean-temp
+	./build/packages/templates/template_app/installer
 
 uninstallMacOs:
 	rm -rf "/Users/$$(whoami)/Desktop/smartCalc.app" "/Applications/smartCalc.app"

@@ -36,13 +36,14 @@ Available options:
 Identity names can be listed with: security find-identity -v -p codesigning"
 
 ARG_DIR=`pwd`
+echo ${ARG_DIR}
 # ARG_DIR=./build/packages/done/
 ARG_ICON=./assets/icon.icns
 ARG_BACKGROUND=./build/packages/templates/template_app/background.jpg
 ARG_COORDS=
 ARG_SIZE="450:310"
 ARG_DMG_NAME="smartCalcApp"
-ARG_VOL_NAME="samrtCalc"
+ARG_VOL_NAME="smartCalc"
 ARG_TMP_DIR="./build/packages/tmp/"
 ARG_ADD_VERSION=
 ARG_CODESIGN_ID=

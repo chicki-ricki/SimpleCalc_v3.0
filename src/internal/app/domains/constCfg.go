@@ -115,6 +115,8 @@ func readConfig(fileName string, c *Cfg) error {
 
 // Inicialize config
 func InitConfig(fileName string) *Cfg {
+	pwd, _ := os.Getwd()
+	fmt.Println("pwd:", pwd)
 	var c Cfg
 
 	if fileName != "" {
