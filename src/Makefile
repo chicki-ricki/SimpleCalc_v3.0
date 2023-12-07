@@ -75,17 +75,17 @@ app:	build
 	rm -f run.command smartCalc appMaker
 
 installMacOS:	app
-# # cp -r ./build/packages/done/smartCalc.app /Applications
-# 	sudo hdiutil attach smartCalcApp.dmg
-# #	cd /Volumes/smartCalc
-# 	sudo cp -rf /Volumes/smartCalc/smartCalc.app /Applications
-# #	popd
+# installMacOS:
+# 	hdiutil create "./build/packages/smartCalcApp.dmg" -ov -volname "smartCalc" -fs HFS+ -srcfolder "./build/packages/done/smartCalc.app/"
+# #	hdiutil create -srcfolder "./build/packages/done/smartCalc.app/" -volname "smartCalc" -fs HFS+  -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${25000}k pack.temp.dmg 
+# 	hdiutil attach "./build/packages/smartCalcApp.dmg"
+# 	mkdir "/Volumes/smartCalc/.background"
+# 	sudo chmod -Rf go-w /Volumes/smartCalc/.background
+# 	cp "./build/packages/macOS/.background/backgroundMathw4.jpg" "/Volumes/smartCalc/.background/"
+
+# 	cp -rf /Volumes/smartCalc/smartCalc.app /Applications
+# 	ln -s "/Applications/smartCalc.app" "/Users/$$(whoami)/Desktop"
 # 	hdiutil detach /dev/disk2s1
-	hdiutil create "./build/packages/smartCalcApp.dmg" -ov -volname "smartCalc" -fs HFS+ -srcfolder "./build/packages/done/smartCalc.app/"
-	hdiutil attach "./build/packages/smartCalcApp.dmg"
-	cp -rf /Volumes/smartCalc/smartCalc.app /Applications
-	ln -s "/Applications/smartCalc.app" "/Users/$$(whoami)/Desktop"
-#	ln -s "$PWD/app.jar" "$HOME/Рабочий стол/app"
-	hdiutil detach /dev/disk2s1
+	./build/packages/macOS/dmgMaker  -c 350:160:200:160 "./build/packages/done/"
 
 	
