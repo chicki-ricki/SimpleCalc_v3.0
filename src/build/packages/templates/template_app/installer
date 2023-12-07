@@ -2,11 +2,9 @@
 
 DMG_NAME=smartCalcApp.dmg
 
-# make clean-temp
 echo `pwd`
 hdiutil create "./build/packages/temp/${DMG_NAME}" -ov -volname "smartCalc" -fs HFS+ -srcfolder "./build/packages/done/app/smartCalc.app"
 device=$(hdiutil attach "./build/packages/temp/${DMG_NAME}" | egrep '^/dev/' | sed 1q | awk '{print $1}')
-# echo "done! (device ${device})"
 cp -rf /Volumes/smartCalc/smartCalc.app /Applications
 ln -s "/Applications/smartCalc.app" "/Users/$(whoami)/Desktop"
 hdiutil detach -force ${device}

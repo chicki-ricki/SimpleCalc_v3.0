@@ -1,13 +1,7 @@
 BINARY_NAME=smartCalc
 VERSION=3.0
 BUILDPATH=./build/bin/
-# DEBPACKAGE=./build/packages/${BINARY_NAME}-${VERSION}/debian
 DEBDIR=./build/packages/temp/DEB
-#GO=$(shell which go)
-#GOINSTALL=$(GO) install
-#GOCLEAN=$(GO) clean
-# USERDECKTOP=$${whoami}
-DMG_NAME=smartCalcApp.dmg
 
 # RUN COMMANDS
 name:
@@ -33,18 +27,6 @@ building:
 #	GOARCH=amd64 GOOS=windows go build -o ./build/bin/${BINARY_NAME}-windows ./cmd/smartCalc/main.go
 	go build -o ${BUILDPATH}${BINARY_NAME} ./cmd/smartCalc/main.go
 	@echo "\033[0;32mbinary file builded in ${BUILDPATH}\033[0m"
-
-# building:
-# # GOARCH=arm GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/clevercalc/main.go
-# # GOARCH=amd64 GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/clevercalc/main.go
-# # GOARCH=amd64 GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/smartCalc/main.go
-# 	GOARCH=amd64 GOOS=darwin go build -o ./build/bin/${BINARY_NAME} ./cmd/smartCalc/main.go
-# # 	GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/clevercalc/main.go
-# # #	GOARCH=amd64 GOOS=windows go build -o ./build/bin/${BINARY_NAME}-windows ./cmd/clevercalc/main.go
-# 	@echo "\033[0;32mbinary file builded\033[0m"
-
-# name:
-# 	@echo $(NAME)
 
 build-linux: building-linux
 
@@ -114,13 +96,6 @@ dmgMacOS:	app
 	mv smartCalcApp.dmg ./build/packages/done/dmg/
 
 installMacOS: app
-# 	hdiutil create "./build/packages/temp/${DMG_NAME}" -ov -volname "smartCalc" -fs HFS+ -srcfolder "./build/packages/done/app/smartCalc.app"
-# #	device=$(hdiutil attach -readwrite -noverify -noautoopen "./build/packages/temp/${DMG_NAME}" | egrep '^/dev/' | sed 1q | awk '{print $1}')
-# #	echo "done! (device ${device})"
-# 	hdiutil attach "./build/packages/temp/${DMG_NAME}"
-# 	cp -rf /Volumes/smartCalc/smartCalc.app /Applications
-# 	ln -s "/Applications/smartCalc.app" "/Users/$$(whoami)/Desktop"
-# 	hdiutil detach /dev/disk2s1
 	make clean-temp
 	./build/packages/templates/template_app/installer
 
@@ -139,57 +114,3 @@ help:
 	@echo "tobin\t-\tcopying binary file to /usr/bin"
 	@echo "todeb\t-\tcopying binary file to ${DEBPACKAGE}/usr/bin"
 	@echo "debcreate\t-\tcreate .deb package from ${DEBPACKAGE}\n\033[0m"
-
-# test: testing
-
-# bin:
-# 	./build/bin/clevercalc-linux
-
-# clean:
-# 	rm -f ./build/bin/*
-# 	@echo "\033[0;34m./build/bin folder was cleared\033[0m"
-
-# cleanpackage:
-# 	rm -Rf ./build/bin/*
-
-# # testing:
-# # 	go test ./... -v -cover
-
-# debcreate: clean building todeb
-# #	dpkg-deb --build ./build/packages/debian ./build/packages/done/clevercalc-0.0.2_amd64.deb
-# 	dpkg-deb --build ${DEBPACKAGE} ./build/packages/done/${BINARY_NAME}-${VERSION}_amd64.deb
-# 	@echo "\033[0;32m${BINARY_NAME}-${VERSION}_amd64.deb created in ./build/packages/done/\033[0m"
-
-# tobin:
-# 	 cp ./build/bin/clevercalc-linux /usr/bin/clevercalc
-# 	 @echo "\033[0;32mbinary file copied to /usr/bin as clevercalc\033[0m"
-
-# todeb:
-# 	rm -f ${DEBPACKAGE}/usr/bin/clevercalc
-# 	@echo "\033[0;34m${DEBPACKAGE}/usr/bin/clevercalc was removed\033[0m"
-# 	cp ./build/bin/clevercalc-linux ${DEBPACKAGE}/usr/bin/clevercalc
-# 	@echo "\033[0;32mbinary file copied to ${DEBPACKAGE}/usr/bin as clevercalc\033[0m"
-
-# app:	build
-# 	rm -R -f ./build/packages/done/smartCalc.app
-# 	cp ./build/bin/smartCalc .
-# 	cp ./build/packages/macOS/run.command .
-# 	cp ./build/packages/macOS/appMaker .
-# 	./appMaker run.command smartCalc
-# 	rm -f run.command smartCalc appMaker
-
-# installMacOS:	app
-# # installMacOS:
-# # 	hdiutil create "./build/packages/smartCalcApp.dmg" -ov -volname "smartCalc" -fs HFS+ -srcfolder "./build/packages/done/smartCalc.app/"
-# # #	hdiutil create -srcfolder "./build/packages/done/smartCalc.app/" -volname "smartCalc" -fs HFS+  -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${25000}k pack.temp.dmg 
-# # 	hdiutil attach "./build/packages/smartCalcApp.dmg"
-# # 	mkdir "/Volumes/smartCalc/.background"
-# # 	sudo chmod -Rf go-w /Volumes/smartCalc/.background
-# # 	cp "./build/packages/macOS/.background/backgroundMathw4.jpg" "/Volumes/smartCalc/.background/"
-
-# # 	cp -rf /Volumes/smartCalc/smartCalc.app /Applications
-# # 	ln -s "/Applications/smartCalc.app" "/Users/$$(whoami)/Desktop"
-# # 	hdiutil detach /dev/disk2s1
-# 	./build/packages/macOS/dmgMaker  -c 350:160:200:160 "./build/packages/done/"
-
-	
