@@ -8,32 +8,46 @@ import (
 )
 
 type Cfg struct {
-	WorkDir     string `json:"WorkDir"`
-	AssetsDir   string `json:"AssetsDir"`
-	LogDir      string `json:"LogDir"`
-	TempFileDir string `json:"TempFileDir"`
+	WorkDir     string `json:"WorkDir"`     // Directory with programm
+	AssetsDir   string `json:"AssetsDir"`   // Directory with help.txt and type
+	LogDir      string `json:"LogDir"`      // Directory for log
+	TempFileDir string `json:"TempFileDir"` // Directory for Tempfile
 
-	TempGraph   string `json:"TempGraph"`
-	HistoryFile string `json:"HistoryFile"`
+	TempGraph   string `json:"TempGraph"`   // tempfile name
+	HistoryFile string `json:"HistoryFile"` // historyfile path (with directory)
 
-	XWindowGraph uint32 `json:"XWindowGraph"`
-	YWindowGraph uint32 `json:"YWindowGraph"`
+	XWindowGraph uint32 `json:"XWindowGraph"` // Graph window size X
+	YWindowGraph uint32 `json:"YWindowGraph"` // Graph window size Y
 
-	DarkTheme string `json:"DarkTheme"`
-	IconPath  string `json:"IconPath"`
-	TypePath  string `json:"TypePath"`
+	DarkTheme string `json:"DarkTheme"` //Dark mode "yes" or "no"
+	IconPath  string `json:"IconPath"`  //iconfile name
+	TypePath  string `json:"TypePath"`  //Typefile name
 
-	Debug bool `json:"Debug"`
+	Debug bool `json:"Debug"` //debug mode with output additional info to terminal -  true or false
 }
 
-const (
-	configPathMain = "/Applications/smartCalc.app/Contents/Resources/config/smartCalc.cfg"
-	configPathOpt  = "config/smartCalc.cfg"
+var (
+	// Path for config in linux system
+	// [0] - main; [1] - optional
+	ConfigLinuxPath = []string{
+		"/etc/clevercalc/clevercalc.cfg",
+		"config/clevercalc.cfg",
+	}
+
+	// Path for config in Mac system
+	// [0] - main; [1] - optional
+	ConfigMacPath = []string{
+		"/Applications/smartCalc.app/Contents/Resources/config/smartCalc.cfg",
+		"/Users/eugenia/00_IT_projects/06_sber21/03_APG2_SmartCalc_v3.0/src/config/smartCalc.cfg",
+	}
+
+	Os          = runtime.GOOS   // "windows", "darwin", "linux"
+	Arch        = runtime.GOARCH // "amd64", "386", "arm"
+	Config *Cfg = InitConfig("") // Handling config path by type config name in quotes (but this way not recommend)
 )
 
-var Config *Cfg = InitConfig("")
-
-func createNewConfig() *Cfg {
+// Create and write new config for Mac
+func createNewMacConfig() *Cfg {
 	var c Cfg
 
 	c.WorkDir = "./"
@@ -50,24 +64,38 @@ func createNewConfig() *Cfg {
 	c.Debug = false
 
 	data, _ := json.MarshalIndent(c, "", "    ")
-	err := os.WriteFile(configPathOpt, data, 0777)
-
-	os := runtime.GOOS
-	switch os {
-	case "windows":
-		fmt.Println("Windows")
-	case "darwin":
-		fmt.Println("MAC operating system")
-	case "linux":
-		fmt.Println("Linux")
-	default:
-		fmt.Printf("%s.\n", os)
-	}
-
+	err := os.WriteFile(ConfigMacPath[0], data, 0777)
 	if err == nil {
-		fmt.Println("Create and write config to:", configPathOpt)
+		fmt.Println("Create and write config to:", ConfigMacPath[0])
 	} else {
-		fmt.Println("Cannot write config to:", configPathOpt)
+		fmt.Println("Cannot write config to:", ConfigMacPath[0])
+	}
+	return &c
+}
+
+// Create and write new config for Linux
+func createNewLinuxConfig() *Cfg {
+	var c Cfg
+
+	c.WorkDir = "./"
+	c.AssetsDir = c.WorkDir + "assets/"
+	c.LogDir = c.WorkDir + "log/"
+	c.TempFileDir = c.WorkDir + "temp_file/"
+	c.TempGraph = "tempGraph.png"
+	c.HistoryFile = "history.json"
+	c.XWindowGraph = 600
+	c.YWindowGraph = 600
+	c.DarkTheme = "no"
+	c.IconPath = c.AssetsDir + "Icon.png"
+	c.TypePath = c.AssetsDir + "protosans56.ttf"
+	c.Debug = false
+
+	data, _ := json.MarshalIndent(c, "", "    ")
+	err := os.WriteFile(ConfigLinuxPath[1], data, 0777)
+	if err == nil {
+		fmt.Println("Create and write config to:", ConfigLinuxPath[1])
+	} else {
+		fmt.Println("Cannot write config to:", ConfigLinuxPath[1])
 	}
 	return &c
 }
@@ -85,6 +113,7 @@ func readConfig(fileName string, c *Cfg) error {
 	return err
 }
 
+// Inicialize config
 func InitConfig(fileName string) *Cfg {
 	var c Cfg
 
@@ -94,25 +123,35 @@ func InitConfig(fileName string) *Cfg {
 		}
 	}
 
-	if err := readConfig(configPathMain, &c); err == nil {
-		return &c
+	switch Os {
+	case "linux":
+		for _, path := range ConfigLinuxPath {
+			if err := readConfig(path, &c); err == nil {
+				return &c
+			}
+		}
+		return createNewLinuxConfig()
+
+	case "darwin":
+		for _, path := range ConfigMacPath {
+			if err := readConfig(path, &c); err == nil {
+				return &c
+			}
+		}
+		return createNewMacConfig()
 	}
 
-	if err := readConfig(configPathOpt, &c); err == nil {
-		return &c
-	}
-
-	return createNewConfig()
+	return createNewLinuxConfig()
 }
 
-func (c *Cfg) GetWorkDir() string     { return c.WorkDir }
-func (c *Cfg) GetAssetsDir() string   { return c.AssetsDir }
-func (c *Cfg) GetLogDir() string      { return c.LogDir }
-func (c *Cfg) GetTempFileDir() string { return c.TempFileDir }
-func (c *Cfg) GetTempGraph() string   { return c.TempGraph }
-func (c *Cfg) GetHistoryFile() string { return c.HistoryFile }
-func (c *Cfg) GetXWindowGraph() int   { return int(c.XWindowGraph) }
-func (c *Cfg) GetYWindowGraph() int   { return int(c.YWindowGraph) }
-func (c *Cfg) GetDarkTheme() string   { return c.DarkTheme }
-func (c *Cfg) GetIconPath() string    { return c.IconPath }
-func (c *Cfg) GetTypePath() string    { return c.TypePath }
+// func (c *Cfg) GetWorkDir() string     { return c.WorkDir }
+// func (c *Cfg) GetAssetsDir() string   { return c.AssetsDir }
+// func (c *Cfg) GetLogDir() string      { return c.LogDir }
+// func (c *Cfg) GetTempFileDir() string { return c.TempFileDir }
+// func (c *Cfg) GetTempGraph() string   { return c.TempGraph }
+// func (c *Cfg) GetHistoryFile() string { return c.HistoryFile }
+// func (c *Cfg) GetXWindowGraph() int   { return int(c.XWindowGraph) }
+// func (c *Cfg) GetYWindowGraph() int   { return int(c.YWindowGraph) }
+// func (c *Cfg) GetDarkTheme() string   { return c.DarkTheme }
+// func (c *Cfg) GetIconPath() string    { return c.IconPath }
+// func (c *Cfg) GetTypePath() string    { return c.TypePath }

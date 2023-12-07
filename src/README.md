@@ -1,4 +1,4 @@
-# CleverCalc
+# smartCalc
 This is golang and Fyne Desktop implementation of the calculator with equal calculating and graph building.
 
 A programm has tab interface with several additional window such as:
@@ -23,4 +23,19 @@ Tabs of main window:
   - tmp - for tempgraph.png
   - var - for history file
 
-Print "make help" for printing information about command for building and testing
+Print "make help" for printing information about command for building and testing.
+
+The binary files are located in ./build/bin \
+For building in accordance with your machine:
+```
+make build
+```
+The finished packages are located in ./build/packages/done \
+For creating .deb package on Linux:
+```
+make deb
+```
+For creating .app package on macOS:
+```
+make app
+```

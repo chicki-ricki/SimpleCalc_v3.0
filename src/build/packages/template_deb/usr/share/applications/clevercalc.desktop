@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Version=0.0.2
-Type=Application
-Terminal=false
-Exec=/usr/bin/clevercalc
-Name=Clevercalc
-Icon=clevercalc
-Keywords=clevercalc;
