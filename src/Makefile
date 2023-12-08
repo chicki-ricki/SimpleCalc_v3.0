@@ -14,7 +14,7 @@ name:
 	@echo ${BINARY_NAME}-${VERSION}
 
 run:
-	go run ./cmd/smartCalc/main.go 
+	go run ./cmd/${BINARY_NAME}/main.go 
 
 test: testing
 
@@ -27,12 +27,12 @@ build: building
 
 # Uncomment required string for building on you machine, if necessary
 building:
-#	GOARCH=arm GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/smartCalc/main.go
-#	GOARCH=amd64 GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/smartCalc/main.go
-#	GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/smartCalc/main.go
-#	GOARCH=amd64 GOOS=windows go build -o ./build/bin/${BINARY_NAME}-windows ./cmd/smartCalc/main.go
+#	GOARCH=arm GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/${BINARY_NAME}/main.go
+#	GOARCH=amd64 GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/${BINARY_NAME}/main.go
+#	GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/${BINARY_NAME}/main.go
+#	GOARCH=amd64 GOOS=windows go build -o ./build/bin/${BINARY_NAME}-windows ./cmd/${BINARY_NAME}/main.go
 	$(eval start := $(shell date +%s))
-	go build -o ${BUILDPATH}${BINARY_NAME} ./cmd/smartCalc/main.go
+	go build -o ${BUILDPATH}${BINARY_NAME} ./cmd/${BINARY_NAME}/main.go
 	@echo "\033[0;32mbinary file builded in ${BUILDPATH}\033[0m"
 	$(eval end := $(shell date +%s))
 	@echo "" | awk '{ print "building time:",$(start) - $(end), "seconds"}'
@@ -43,7 +43,7 @@ build-linux: building-linux
 building-linux:
 	@rm -f ./build/bin/${BINARY_NAME}-linux
 	@echo "\033[0;34m./build/bin/${BINARY_NAME}-linux was removed\033[0m"
-	@GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/smartCalc/main.go
+	@GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/${BINARY_NAME}/main.go
 	@echo "\033[0;36mbinary file for Linux builded in ${BUILDPATH}\033[0m"
 
 build-darwin: building-darwin
@@ -51,7 +51,7 @@ build-darwin: building-darwin
 building-darwin:
 	@rm -f ./build/bin/${BINARY_NAME}-darwin
 	@echo "\033[0;34m./build/bin/${BINARY_NAME}-darwin was removed\033[0m"
-	GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/smartCalc/main.go
+	GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/${BINARY_NAME}/main.go
 	@echo "\033[0;32mbinary file for macOS builded in ${BUILDPATH}\033[0m"
 
 # CLEANING COMMANDS
@@ -82,7 +82,7 @@ clean-zip:
 
 deb: building-linux
 # Remove old and create new deb-package folder
-	@rm -Rf ${DEB_TEMPDIR} ${DEB_PACKAGEDIR}{BINARY_NAME}-${VERSION}_amd64.deb
+	@rm -Rf ${DEB_TEMPDIR} ${DEB_PACKAGEDIR}${BINARY_NAME}-${VERSION}_amd64.deb
 	@echo "\033[0;34m${DEB_TEMPDIR} was removed\033[0m"
 	@echo "\033[0;34m./build/done/${BINARY_NAME}-${VERSION}_amd64.deb was removed\033[0m"
 	@mkdir ${DEB_TEMPDIR}
@@ -97,16 +97,16 @@ deb: building-linux
 	@echo "\033[0;36m${BINARY_NAME}-${VERSION}_amd64.deb created in ${DEB_PACKAGEDIR}\033[0m"
 
 app:	build
-	rm -R -f ./build/packages/done/app/smartCalc.app
-	cp ./build/bin/smartCalc .
+	rm -R -f ./build/packages/done/app/${BINARY_NAME}.app
+	cp ./build/bin/${BINARY_NAME} .
 	cp ./build/packages/templates/template_app/run.command .
 	cp ./build/packages/templates/template_app/appMaker .
-	./appMaker run.command smartCalc
-	rm -f run.command smartCalc appMaker
+	./appMaker run.command ${BINARY_NAME}
+	rm -f run.command ${BINARY_NAME} appMaker
 
 dmgMacOS:	app
 	./build/packages/templates/template_app/dmgMaker  -c 350:160:200:160 "./build/packages/done/app/"
-	mv smartCalcApp.dmg ./build/packages/done/dmg/
+	mv ${BINARY_NAME}App.dmg ./build/packages/done/dmg/
 
 installMacOS: app
 	make clean-temp
@@ -114,7 +114,7 @@ installMacOS: app
 	make clean-temp
 
 uninstallMacOs:
-	rm -rf "/Users/$$(whoami)/Desktop/smartCalc.app" "/Applications/smartCalc.app"
+	rm -rf "/Users/$$(whoami)/Desktop/${BINARY_NAME}.app" "/Applications/${BINARY_NAME}.app"
 
 # OTHER
 

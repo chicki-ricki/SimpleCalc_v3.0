@@ -16,17 +16,18 @@ exit; fi
 APPNAME=${2:-$(basename "$1" ".sh")}
 
 APPSRC="./build/packages/done/app/smartCalc.app"
+RESOURCES="$APPSRC/Contents/Resources"
 mkdir -p "$APPSRC/Contents/MacOS"
-mkdir -p "$APPSRC/Contents/Resources"
+mkdir -p ${RESOURCES}
 
 cp "$1" "$APPSRC/Contents/MacOS/$APPNAME"
 
 cp "./build/packages/templates/template_app/Info.plist" "$APPSRC/Contents"
 # копирование основной части проекта
-cp -r "./assets" "$APPSRC/Contents/Resources"
-cp -r "./config" "$APPSRC/Contents/Resources"
-cp -r "./tmp" "$APPSRC/Contents/Resources"
-cp -r "./var" "$APPSRC/Contents/Resources"
-cp "smartCalc" "$APPSRC/Contents/Resources"
+cp -r "./assets" ${RESOURCES}
+cp -r "./config" ${RESOURCES}
+cp -r "./tmp" ${RESOURCES}
+cp -r "./var" ${RESOURCES}
+cp "smartCalc" ${RESOURCES}
 
 chmod +x "$APPSRC/Contents/MacOS/$APPNAME"

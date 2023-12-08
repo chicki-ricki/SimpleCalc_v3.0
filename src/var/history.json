@@ -20,5 +20,27 @@
         "xTo": "",
         "yFrom": "",
         "yTo": ""
+    },
+    {
+        "mode": "graph",
+        "equation": "2x/8",
+        "result": "Y {-75.00 .. 75.00}",
+        "entrys": "X{-300 .. 300} Y{-300 .. 300} ",
+        "xEqual": "",
+        "xFrom": "-300",
+        "xTo": "300",
+        "yFrom": "-300",
+        "yTo": "300"
+    },
+    {
+        "mode": "graph",
+        "equation": "2x/8*x",
+        "result": "Y {0.00 .. 22500.00}",
+        "entrys": "X{-300 .. 300} Y{-300 .. 300} ",
+        "xEqual": "",
+        "xFrom": "-300",
+        "xTo": "300",
+        "yFrom": "-300",
+        "yTo": "300"
     }
 ]
