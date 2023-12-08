@@ -16,43 +16,17 @@ exit; fi
 APPNAME=${2:-$(basename "$1" ".sh")}
 
 APPSRC="./build/packages/done/app/smartCalc.app"
-# mkdir -p "$APPSRC"
 mkdir -p "$APPSRC/Contents/MacOS"
 mkdir -p "$APPSRC/Contents/Resources"
 
-# DIR="/Applications/$APPNAME.app/Contents/MacOS"
-# RESOURCES="/Applications/$APPNAME.app/Contents/Resources"
-
-# if [ -a "/Applications/$APPNAME.app" ]; then
-# 	echo "/Applications/$APPNAME.app already exists :("
-# 	exit 1
-# fi
-
-# mkdir -p "$DIR"
-# cp "$1" "$DIR/$APPNAME"
 cp "$1" "$APPSRC/Contents/MacOS/$APPNAME"
-# mkdir -p "$RESOURCES"
-# # копирование plist
-# cp "./smartCalc.app/Contents/Info.plist" "/Applications/$APPNAME.app/Contents"
-# # копирование основной части проекта
-# # cp -r "/Users/eugenia/00_IT_projects/06_sber21/03_APG2_SmartCalc_v3.0/src" "$RESOURCES"
-# cp -r "./assets" "$RESOURCES"
-# cp -r "./config" "$RESOURCES"
-# cp -r "./tmp" "$RESOURCES"
-# cp -r "./var" "$RESOURCES"
-# cp "smartCalc" "$RESOURCES"
-# chmod +x "$DIR/$APPNAME"
 
 cp "./build/packages/templates/template_app/Info.plist" "$APPSRC/Contents"
 # копирование основной части проекта
-# cp -r "/Users/eugenia/00_IT_projects/06_sber21/03_APG2_SmartCalc_v3.0/src" "$RESOURCES"
 cp -r "./assets" "$APPSRC/Contents/Resources"
 cp -r "./config" "$APPSRC/Contents/Resources"
 cp -r "./tmp" "$APPSRC/Contents/Resources"
 cp -r "./var" "$APPSRC/Contents/Resources"
 cp "smartCalc" "$APPSRC/Contents/Resources"
+
 chmod +x "$APPSRC/Contents/MacOS/$APPNAME"
-
-
-
-# echo "/Applications/$APPNAME.app"

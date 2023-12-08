@@ -82,20 +82,19 @@ clean-zip:
 
 deb: building-linux
 # Remove old and create new deb-package folder
-	@rm -Rf ${DEBDIR} ./build/done/{BINARY_NAME}-${VERSION}_amd64.deb
-	@echo "\033[0;34m${DEBDIR} was removed\033[0m"
+	@rm -Rf ${DEB_TEMPDIR} ${DEB_PACKAGEDIR}{BINARY_NAME}-${VERSION}_amd64.deb
+	@echo "\033[0;34m${DEB_TEMPDIR} was removed\033[0m"
 	@echo "\033[0;34m./build/done/${BINARY_NAME}-${VERSION}_amd64.deb was removed\033[0m"
-	@mkdir ${DEBDIR}
+	@mkdir ${DEB_TEMPDIR}
+
 # Copy data from .deb template to deb-package folder
-	@cp -R ./build/packages/templates/template_deb/* ${DEBDIR}
-	@cp ${BUILDPATH}${BINARY_NAME}-linux ${DEBDIR}/usr/bin/${BINARY_NAME}
-	@echo "\033[0;32mtemp directory for debian package created in ${DEBDIR} \033[0m"
+	@cp -R ./build/packages/templates/template_deb/* ${DEB_TEMPDIR}
+	@cp ${BUILDPATH}${BINARY_NAME}-linux ${DEB_TEMPDIR}/usr/bin/${BINARY_NAME}
+	@echo "\033[0;32mtemp directory for debian package created in ${DEB_TEMPDIR} \033[0m"
+
 # Run command to compose .deb packages
-	@dpkg-deb --build ${DEBDIR} ./build/packages/done/${BINARY_NAME}-${VERSION}_amd64.deb
-	@echo "\033[0;36m${BINARY_NAME}-${VERSION}_amd64.deb created in ./build/packages/done/\033[0m"
-# Remove temp files
-	@rm -Rf ${DEBDIR}
-	@echo "\033[0;34mTempfile was removed\033[0m"
+	@dpkg-deb --build ${DEB_TEMPDIR} ${DEB_PACKAGEDIR}${BINARY_NAME}-${VERSION}_amd64.deb
+	@echo "\033[0;36m${BINARY_NAME}-${VERSION}_amd64.deb created in ${DEB_PACKAGEDIR}\033[0m"
 
 app:	build
 	rm -R -f ./build/packages/done/app/smartCalc.app

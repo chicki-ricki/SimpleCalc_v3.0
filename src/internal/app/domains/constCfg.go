@@ -28,37 +28,81 @@ type Cfg struct {
 
 var (
 	// Path for config in linux system
-	// [0] - main; [1] - optional
+	Os              = runtime.GOOS   // "windows", "darwin", "linux"
+	Arch            = runtime.GOARCH // "amd64", "386", "arm"
+	userDir, _      = os.Getwd()
+	testDir         = testDirFind(userDir)
 	ConfigLinuxPath = []string{
 		"/etc/smartCalc/smartCalcLinux.cfg",
-		"config/smartCalcLinux.cfg",
+		userDir + "/config/smartCalcLinuxIn.cfg",
+		testDir + "/config/smartCalcTest.cfg",
 	}
 
 	// Path for config in Mac system
-	userDir, _ = os.Getwd()
-	testDir    = userDir[:len(userDir)-19]
 
 	ConfigMacPath = []string{
 		"/Applications/smartCalc.app/Contents/Resources/config/smartCalcMacOS.cfg",
 		userDir + "/config/smartCalcMacOSIn.cfg",
-		testDir + "/config/smartCalcMacOSIn.cfg",
+		testDir + "/config/smartCalcTest.cfg",
 	}
 
-	Os          = runtime.GOOS   // "windows", "darwin", "linux"
-	Arch        = runtime.GOARCH // "amd64", "386", "arm"
 	Config *Cfg = InitConfig("") // Handling config path by type config name in quotes (but this way not recommend)
 )
 
-// Create and write new config for Mac
-func createNewMacConfig() *Cfg {
+// // Create and write new config for Mac
+// func createNewMacConfig() *Cfg {
+// 	var c Cfg
+
+// 	c.WorkDir = userDir
+// 	c.AssetsDir = c.WorkDir + "/assets/"
+// 	c.LogDir = c.WorkDir + "/log/"
+// 	c.TempFileDir = c.WorkDir + "/tmp/"
+// 	c.TempGraph = "tempGraph.png"
+// 	c.HistoryFile = c.WorkDir + "/var/history.json"
+// 	c.XWindowGraph = 600
+// 	c.YWindowGraph = 600
+// 	c.DarkTheme = "no"
+// 	c.IconPath = c.AssetsDir + "Icon.png"
+// 	c.TypePath = c.AssetsDir + "protosans56.ttf"
+// 	c.Debug = false
+
+// 	fmt.Println("New config file created")
+
+// 	return &c
+// }
+
+// // Create and write new config for Linux
+// func createNewLinuxConfig() *Cfg {
+// 	var c Cfg
+
+// 	c.WorkDir = userDir
+// 	c.AssetsDir = c.WorkDir + "/assets/"
+// 	c.LogDir = c.WorkDir + "/log/"
+// 	c.TempFileDir = c.WorkDir + "/tmp/"
+// 	c.TempGraph = "tempGraph.png"
+// 	c.HistoryFile = c.WorkDir + "/var/history.json"
+// 	c.XWindowGraph = 600
+// 	c.YWindowGraph = 600
+// 	c.DarkTheme = "no"
+// 	c.IconPath = c.AssetsDir + "Icon.png"
+// 	c.TypePath = c.AssetsDir + "protosans56.ttf"
+// 	c.Debug = false
+
+// 	fmt.Println("New config file created")
+
+// 	return &c
+// }
+
+// Create and write new config file
+func createNewConfig() *Cfg {
 	var c Cfg
 
-	c.WorkDir = "./"
-	c.AssetsDir = c.WorkDir + "assets/"
-	c.LogDir = c.WorkDir + "log/"
-	c.TempFileDir = c.WorkDir + "temp_file/"
+	c.WorkDir = userDir
+	c.AssetsDir = c.WorkDir + "/assets/"
+	c.LogDir = c.WorkDir + "/log/"
+	c.TempFileDir = c.WorkDir + "/tmp/"
 	c.TempGraph = "tempGraph.png"
-	c.HistoryFile = "history.json"
+	c.HistoryFile = c.WorkDir + "/var/history.json"
 	c.XWindowGraph = 600
 	c.YWindowGraph = 600
 	c.DarkTheme = "no"
@@ -66,40 +110,8 @@ func createNewMacConfig() *Cfg {
 	c.TypePath = c.AssetsDir + "protosans56.ttf"
 	c.Debug = false
 
-	data, _ := json.MarshalIndent(c, "", "    ")
-	err := os.WriteFile(ConfigMacPath[0], data, 0777)
-	if err == nil {
-		fmt.Println("Create and write config to:", ConfigMacPath[0])
-	} else {
-		fmt.Println("Cannot write config to:", ConfigMacPath[0])
-	}
-	return &c
-}
+	fmt.Println("New config file created")
 
-// Create and write new config for Linux
-func createNewLinuxConfig() *Cfg {
-	var c Cfg
-
-	c.WorkDir = "./"
-	c.AssetsDir = c.WorkDir + "assets/"
-	c.LogDir = c.WorkDir + "log/"
-	c.TempFileDir = c.WorkDir + "temp_file/"
-	c.TempGraph = "tempGraph.png"
-	c.HistoryFile = "history.json"
-	c.XWindowGraph = 600
-	c.YWindowGraph = 600
-	c.DarkTheme = "no"
-	c.IconPath = c.AssetsDir + "Icon.png"
-	c.TypePath = c.AssetsDir + "protosans56.ttf"
-	c.Debug = false
-
-	data, _ := json.MarshalIndent(c, "", "    ")
-	err := os.WriteFile(ConfigLinuxPath[1], data, 0777)
-	if err == nil {
-		fmt.Println("Create and write config to:", ConfigLinuxPath[1])
-	} else {
-		fmt.Println("Cannot write config to:", ConfigLinuxPath[1])
-	}
 	return &c
 }
 
@@ -135,7 +147,8 @@ func InitConfig(fileName string) *Cfg {
 				return &c
 			}
 		}
-		return createNewLinuxConfig()
+		// return createNewLinuxConfig()
+		return createNewConfig()
 
 	case "darwin":
 		for _, path := range ConfigMacPath {
@@ -143,10 +156,12 @@ func InitConfig(fileName string) *Cfg {
 				return &c
 			}
 		}
-		return createNewMacConfig()
+		// return createNewMacConfig()
+		return createNewConfig()
 	}
 
-	return createNewLinuxConfig()
+	// return createNewLinuxConfig()
+	return createNewConfig()
 }
 
 // func (c *Cfg) GetWorkDir() string     { return c.WorkDir }
@@ -160,3 +175,10 @@ func InitConfig(fileName string) *Cfg {
 // func (c *Cfg) GetDarkTheme() string   { return c.DarkTheme }
 // func (c *Cfg) GetIconPath() string    { return c.IconPath }
 // func (c *Cfg) GetTypePath() string    { return c.TypePath }
+
+func testDirFind(userDir string) string {
+	if len(userDir) > 20 {
+		return userDir[:len(userDir)-19]
+	}
+	return userDir
+}
