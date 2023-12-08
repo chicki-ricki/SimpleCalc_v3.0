@@ -58,7 +58,7 @@ func (e *equalModel) GetResult() (out ModelsOutput) {
 func (e *equalModel) calculate(str string, x float64) (pixel SCoordinates) {
 	var err error
 	pixel.x = x
-	pixel.y, err = e.equation.onlyCalculate(e.equation.prepareString(strings.ReplaceAll(e.addStaplesForX(str), "x", strconv.FormatFloat(x, 'f', -1, 64))))
+	pixel.y, err = e.equation.onlyCalculate(e.equation.prepareString(strings.ReplaceAll(str, "x", strconv.FormatFloat(x, 'f', -1, 64))))
 	if err != nil || math.IsNaN(pixel.y) || math.IsInf(pixel.y, 0) {
 		pixel.err = true
 		return
@@ -69,14 +69,20 @@ func (e *equalModel) calculate(str string, x float64) (pixel SCoordinates) {
 // Adding staples and Multi for x and brackets in equal
 func (e *equalModel) addStaplesForX(str string) string {
 
-	// handle x at the begining of string
+	// handle sign before first x at the begining of string
 	templength := len(str)
+	if templength > 1 && strings.Contains("-x+x/x*x", string(str[0:2])) {
+		str = fmt.Sprint("0" + string(str[0:]))
+	}
+
+	// handle x at the begining of string
+	templength = len(str)
 	if string(str[0:1]) == "x" {
 		switch templength == 1 {
 		case false:
 			str = fmt.Sprint("(x)" + string(str[1:]))
 		case true:
-			str = "(x)"
+			str = "x"
 			return str
 		}
 	}
@@ -100,10 +106,19 @@ func (e *equalModel) addStaplesForX(str string) string {
 			str = fmt.Sprint(string(str[0:i]) + "(x)" + string(str[i+1:]))
 		} else if string(str[i:i+1]) == "(" && strings.Contains("0123456789x)", string(str[i-1:i])) {
 			str = fmt.Sprint(str[0:i] + "*(" + string(str[i+1:]))
-		} else if string(str[i-1:i]) == ")" && strings.Contains("0123456789", string(str[i:i+1])) {
-			str = fmt.Sprint(str[0:i] + ")*" + string(str[i+1:]))
 		}
 	}
+
+	// handle ")num" situation
+	for i := len(str) - 2; i >= 1; i-- {
+		if strings.Contains("0123456789", string(str[i:i+1])) && string(str[i-1:i]) == ")" {
+			str = fmt.Sprint(str[0:i] + "*" + string(str[i:]))
+		}
+	}
+
+	// remove double and triple staples
+	// str = strings.ReplaceAll(strings.ReplaceAll(str, "(((x)))", "(x)"), "((x))", "(x)")
+
 	return str
 }
 

@@ -25,15 +25,19 @@ building:
 #	GOARCH=amd64 GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/smartCalc/main.go
 #	GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/smartCalc/main.go
 #	GOARCH=amd64 GOOS=windows go build -o ./build/bin/${BINARY_NAME}-windows ./cmd/smartCalc/main.go
+	$(eval start := $(shell date +%s))
 	go build -o ${BUILDPATH}${BINARY_NAME} ./cmd/smartCalc/main.go
 	@echo "\033[0;32mbinary file builded in ${BUILDPATH}\033[0m"
+	$(eval end := $(shell date +%s))
+	@echo "" | awk '{ print "building time:",$(start) - $(end), "seconds"}'
+#	@echo "\033[0m"
 
 build-linux: building-linux
 
 building-linux:
 	@rm -f ./build/bin/${BINARY_NAME}-linux
 	@echo "\033[0;34m./build/bin/${BINARY_NAME}-linux was removed\033[0m"
-	@GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/clevercalc/main.go
+	@GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/smartCalc/main.go
 	@echo "\033[0;36mbinary file for Linux builded in ${BUILDPATH}\033[0m"
 
 build-darwin: building-darwin
@@ -41,7 +45,7 @@ build-darwin: building-darwin
 building-darwin:
 	@rm -f ./build/bin/${BINARY_NAME}-darwin
 	@echo "\033[0;34m./build/bin/${BINARY_NAME}-darwin was removed\033[0m"
-	GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/clevercalc/main.go
+	GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/smartCalc/main.go
 	@echo "\033[0;32mbinary file for macOS builded in ${BUILDPATH}\033[0m"
 
 # CLEANING COMMANDS
@@ -63,6 +67,10 @@ clean-package:
 clean-temp:
 	@rm -Rf ./build/packages/temp/*
 	@echo "\033[0;34mtempfolder was cleared\033[0m"
+
+clean-zip:
+	@rm -Rf ./zip/*.tar.gz
+	@echo "\033[0;34marchive folder was cleared\033[0m"
 
 # PACKAGE CREATE COMMANDS
 
@@ -98,6 +106,7 @@ dmgMacOS:	app
 installMacOS: app
 	make clean-temp
 	./build/packages/templates/template_app/installer
+	make clean-temp
 
 uninstallMacOs:
 	rm -rf "/Users/$$(whoami)/Desktop/smartCalc.app" "/Applications/smartCalc.app"
@@ -105,12 +114,38 @@ uninstallMacOs:
 # OTHER
 
 help:
-	@echo "\033[0;36m\nCommand list for this Makefile:\n"
-	@echo "build\t-\tbuilding binary file in ${BUILDPATH}"
-	@echo "run\t-\trunning programm with go run"
-	@echo "test\t-\ttesting test with go test ./... -v -cover"
-	@echo "bin\t-\trunning binary file from ${BUILDPATH}"
-	@echo "clean\t-\tcleaning all binary files in ${BUILDPATH}"
-	@echo "tobin\t-\tcopying binary file to /usr/bin"
-	@echo "todeb\t-\tcopying binary file to ${DEBPACKAGE}/usr/bin"
-	@echo "debcreate\t-\tcreate .deb package from ${DEBPACKAGE}\n\033[0m"
+	@echo "\033[0;32m\nRUN COMMANDS\033[0m"
+	@echo "\033[0;36mname\t\t-\tshow name with version"
+	@echo "run\t\t-\trunning programm with go run"
+	@echo "test\t\t-\ttesting test with go test ./... -v -cover\033[0m"
+
+	@echo "\033[0;32m\nBUILD COMMANDS\033[0m"
+	@echo "\033[0;36mbuild\t\t-\tbuilding binary file in ${BUILDPATH} in accordance with your machine"
+	@echo "build-linux\t-\tbuilding binary file for Linux in ${BUILDPATH}"
+	@echo "build-darwin\t-\tbuilding binary file for macOS in ${BUILDPATH}\033[0m"
+
+	@echo "\033[0;32m\nPACKAGE CREATE COMMANDS\033[0m"
+	@echo "\033[0;36mdeb\t\t-\tcreate .deb package in ./build/packages/done/deb (required linux)"
+	@echo "dmg\t\t-\tcreate .dmg package in ./build/packages/done/dmg (required macOS)"
+	@echo "app\t\t-\tcreate .app package in ./build/packages/done/app\033[0m"
+
+	@echo "\033[0;32m\nCLEAN COMMANDS\033[0m"
+	@echo "\033[0;36mclean\t\t-\tcleaning all binary files in ${BUILDPATH}"
+	@echo "clean-temp\t-\tcleaning temp files in ./build/packages/temp"
+	@echo "clean-package\t-\tcleaning all binary files in ./build/packages/done/*"
+	@echo "clean-all\t-\trun clean clean-temp clean-package"
+	@echo "clean-zip\t-\tclean archive from ./zip\033[0m"
+
+	@echo "\033[0;32m\nUN/INSTALL COMMANDS\033[0m"
+	@echo "\033[0;36minstallMacOS\t-\tinstall to MacOS"
+	@echo "uninstallMacOs\t-\tuninstall from MacOS\033[0m"
+
+	@echo "\033[0;32m\nOTHER COMMANDS\033[0m"
+	@echo "\033[0;36mzip\t\t-\tcreate this folder archive in ./zip with datastamp"
+	@echo "tobin\t\t-\tcopying binary file to /usr/bin"
+	@echo "todeb\t\t-\tcopying binary file to ${DEBPACKAGE}/usr/bin"
+	@echo "help\t\t-\tshow this help\n\033[0m"
+
+zip: clean-all
+	@tar --exclude-tag-all="nozip" -cvaf ./zip/${BINARY_NAME}_srs_${DATE}.tar.gz *
+	@echo "\033[0;32marchive file created to ../ as ${BINARY_NAME}_srs_${DATE}.tar.gz\033[0m"

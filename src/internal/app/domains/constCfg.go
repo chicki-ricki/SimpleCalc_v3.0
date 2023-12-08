@@ -30,15 +30,18 @@ var (
 	// Path for config in linux system
 	// [0] - main; [1] - optional
 	ConfigLinuxPath = []string{
-		"/etc/clevercalc/clevercalc.cfg",
-		"config/clevercalc.cfg",
+		"/etc/smartCalc/smartCalcLinux.cfg",
+		"config/smartCalcLinux.cfg",
 	}
 
 	// Path for config in Mac system
-	// [0] - main; [1] - optional
+	userDir, _ = os.Getwd()
+	testDir    = userDir[:len(userDir)-19]
+
 	ConfigMacPath = []string{
-		"/Applications/smartCalc.app/Contents/Resources/config/smartCalc.cfg",
-		"/Users/eugenia/00_IT_projects/06_sber21/03_APG2_SmartCalc_v3.0/src/config/smartCalc.cfg",
+		"/Applications/smartCalc.app/Contents/Resources/config/smartCalcMacOS.cfg",
+		userDir + "/config/smartCalcMacOSIn.cfg",
+		testDir + "/config/smartCalcMacOSIn.cfg",
 	}
 
 	Os          = runtime.GOOS   // "windows", "darwin", "linux"
@@ -115,9 +118,9 @@ func readConfig(fileName string, c *Cfg) error {
 
 // Inicialize config
 func InitConfig(fileName string) *Cfg {
-	pwd, _ := os.Getwd()
-	fmt.Println("pwd:", pwd)
 	var c Cfg
+
+	// fmt.Println("testDir:", userDir)
 
 	if fileName != "" {
 		if err := readConfig(fileName, &c); err == nil {

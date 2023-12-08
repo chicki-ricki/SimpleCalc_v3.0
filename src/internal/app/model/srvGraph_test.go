@@ -17,7 +17,7 @@ var (
 	configCalc = d.InitConfig("../config/smartCalc.cfg")
 	calcmodel  = NewCalcModel(configCalc)
 
-	TestPath = "/Users/eugenia/00_IT_projects/06_sber21/03_APG2_SmartCalc_v3.0/test/"
+	TestPath = "/Users/eugenia/00_IT_projects/06_sber21/03_APG2_SmartCalc_v3.0/src/test"
 
 	testCasesNewGraph = []struct {
 		enter  []string

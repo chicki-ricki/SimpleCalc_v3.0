@@ -53,15 +53,15 @@ func createMInputStructGraph(s string, xFrom string, xTo string, yFrom string, y
 }
 
 func TestCalculate(t *testing.T) {
-	pixel := e.calculate("4x-2", 2)
+	pixel := e.calculate(e.addStaplesForX("4x-2"), 2)
 	if pixel.x != 2 || pixel.y != 6 || pixel.err {
 		t.Errorf("Result is incorrect, %v", pixel)
 	}
-	pixel = e.calculate("x^2 - 3", 2)
+	pixel = e.calculate(e.addStaplesForX("x^2 - 3"), 2)
 	if pixel.x != 2 || pixel.y != 1 || pixel.err {
 		t.Errorf("Result is incorrect, %v", pixel)
 	}
-	pixel = e.calculate("1/x", 0)
+	pixel = e.calculate(e.addStaplesForX("1/x"), 0)
 	if pixel.x != 0 || !pixel.err {
 		fmt.Printf("pixel: %v", pixel)
 		t.Errorf("Result is incorrect, %v", pixel)
