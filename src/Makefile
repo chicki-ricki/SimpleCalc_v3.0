@@ -1,7 +1,13 @@
 BINARY_NAME=smartCalc
 VERSION=3.0
+DATE := $(shell date +_%d-%m-%Y_%H:%M)
+
 BUILDPATH=./build/bin/
-DEBDIR=./build/packages/temp/DEB
+DEB_TEMPDIR=./build/packages/temp/DEB
+
+DEB_PACKAGEDIR = ./build/packages/done/deb/
+APP_PACKAGEDIR = ./build/packages/done/app/
+DMG_PACKAGEDIR = ./build/packages/done/dmg/
 
 # RUN COMMANDS
 name:
@@ -147,5 +153,5 @@ help:
 	@echo "help\t\t-\tshow this help\n\033[0m"
 
 zip: clean-all
-	@tar --exclude-tag-all="nozip" -cvaf ./zip/${BINARY_NAME}_srs_${DATE}.tar.gz *
+	@tar --exclude 'zip' -cvaf ./zip/${BINARY_NAME}_srs_${DATE}.tar.gz *
 	@echo "\033[0;32marchive file created to ../ as ${BINARY_NAME}_srs_${DATE}.tar.gz\033[0m"

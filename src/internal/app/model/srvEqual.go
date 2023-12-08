@@ -71,7 +71,7 @@ func (e *equalModel) addStaplesForX(str string) string {
 
 	// handle sign before first x at the begining of string
 	templength := len(str)
-	if templength > 1 && strings.Contains("-x+x/x*x", string(str[0:2])) {
+	if templength > 1 && (string(str[0:2]) == "-x" || string(str[0:2]) == "+x" || string(str[0:2]) == "*x" || string(str[0:2]) == "/x") {
 		str = fmt.Sprint("0" + string(str[0:]))
 	}
 
