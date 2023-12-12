@@ -131,7 +131,7 @@ installMacOS: app
 	./build/packages/templates/template_app/installer
 	make clean-temp
 
-uninstallMacOs:
+uninstallMacOS:
 	rm -rf "/Users/$$(whoami)/Desktop/${BINARY_NAME}.app" "/Applications/${BINARY_NAME}.app"
 
 # OTHER
