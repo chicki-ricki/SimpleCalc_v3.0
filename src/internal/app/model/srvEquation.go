@@ -63,6 +63,7 @@ func (e *equationModel) onlyCheck() (string, error) {
 
 // calculate prepared string
 func (e *equationModel) onlyCalculate(str string) (rez float64, err error) {
+	e.err = nil
 	if str != "" {
 		if rez, err = e.startCalculate(str); err != nil {
 			e.err = err

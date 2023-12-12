@@ -9,6 +9,12 @@ DEB_PACKAGEDIR = ./build/packages/done/deb/
 APP_PACKAGEDIR = ./build/packages/done/app/
 DMG_PACKAGEDIR = ./build/packages/done/dmg/
 
+PWD=$(shell pwd)
+TIME1 := $(shell date +%s)
+
+GO=go1.19.2
+#GO=go
+
 # RUN COMMANDS
 name:
 	@echo ${BINARY_NAME}-${VERSION}
@@ -31,16 +37,16 @@ building:
 #	GOARCH=amd64 GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/${BINARY_NAME}/main.go
 #	GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/${BINARY_NAME}/main.go
 #	GOARCH=amd64 GOOS=windows go build -o ./build/bin/${BINARY_NAME}-windows ./cmd/${BINARY_NAME}/main.go
-	$(eval start := $(shell date +%s))
+	@echo "${GO}"
 	go build -o ${BUILDPATH}${BINARY_NAME} ./cmd/${BINARY_NAME}/main.go
 	@echo "\033[0;32mbinary file builded in ${BUILDPATH}\033[0m"
 	$(eval end := $(shell date +%s))
-	@echo "" | awk '{ print "building time:",$(start) - $(end), "seconds"}'
-#	@echo "\033[0m"
+	@echo "" | awk '{ print "creating time:", $(shell date +%s) - $(TIME1), "seconds\033[0m"}'
 
 build-linux: building-linux
 
 building-linux:
+	@echo "${GO}"
 	@rm -f ./build/bin/${BINARY_NAME}-linux
 	@echo "\033[0;34m./build/bin/${BINARY_NAME}-linux was removed\033[0m"
 	@GOARCH=amd64 GOOS=linux go build -o ${BUILDPATH}${BINARY_NAME}-linux ./cmd/${BINARY_NAME}/main.go
@@ -49,6 +55,7 @@ building-linux:
 build-darwin: building-darwin
 
 building-darwin:
+	@echo "${GO}"
 	@rm -f ./build/bin/${BINARY_NAME}-darwin
 	@echo "\033[0;34m./build/bin/${BINARY_NAME}-darwin was removed\033[0m"
 	GOOS=darwin go build -o ./build/bin/${BINARY_NAME}-darwin ./cmd/${BINARY_NAME}/main.go
@@ -80,9 +87,10 @@ clean-zip:
 
 # PACKAGE CREATE COMMANDS
 
-deb: building-linux
+deb: building-linux 
+	
 # Remove old and create new deb-package folder
-	@rm -Rf ${DEB_TEMPDIR} ${DEB_PACKAGEDIR}${BINARY_NAME}-${VERSION}_amd64.deb
+	@rm -Rf ${DEB_TEMPDIR} ${DEB_PACKAGEDIR}{BINARY_NAME}-${VERSION}_amd64.deb
 	@echo "\033[0;34m${DEB_TEMPDIR} was removed\033[0m"
 	@echo "\033[0;34m./build/done/${BINARY_NAME}-${VERSION}_amd64.deb was removed\033[0m"
 	@mkdir ${DEB_TEMPDIR}
@@ -90,21 +98,31 @@ deb: building-linux
 # Copy data from .deb template to deb-package folder
 	@cp -R ./build/packages/templates/template_deb/* ${DEB_TEMPDIR}
 	@cp ${BUILDPATH}${BINARY_NAME}-linux ${DEB_TEMPDIR}/usr/bin/${BINARY_NAME}
+
+# if config has been changeg - uncomment next string to write new config from ./config/
 	@echo "\033[0;32mtemp directory for debian package created in ${DEB_TEMPDIR} \033[0m"
 
 # Run command to compose .deb packages
 	@dpkg-deb --build ${DEB_TEMPDIR} ${DEB_PACKAGEDIR}${BINARY_NAME}-${VERSION}_amd64.deb
 	@echo "\033[0;36m${BINARY_NAME}-${VERSION}_amd64.deb created in ${DEB_PACKAGEDIR}\033[0m"
+	@echo "" | awk '{ print "creating time:", $(shell date +%s) - $(TIME1), "seconds\033[0m"}'
+
+# Remove temp files
+	@rm -Rf ${DEB_TEMPDIR}
+	@echo "\033[0;34mTempfile was removed\033[0m"
 
 app:	build
 	rm -R -f ./build/packages/done/app/${BINARY_NAME}.app
+	@echo "\033[0;34m${APP_PACKAGEDIR}${BINARY_NAME}.app was removed\033[0m"
 	cp ./build/bin/${BINARY_NAME} .
 	cp ./build/packages/templates/template_app/run.command .
 	cp ./build/packages/templates/template_app/appMaker .
 	./appMaker run.command ${BINARY_NAME}
+	@echo "\033[0;36m${BINARY_NAME}.app created in ${APP_PACKAGEDIR}\033[0m"
 	rm -f run.command ${BINARY_NAME} appMaker
+	@echo "\033[0;34mTempfile was removed\033[0m"
 
-dmgMacOS:	app
+dmg:	app
 	./build/packages/templates/template_app/dmgMaker  -c 350:160:200:160 "./build/packages/done/app/"
 	mv ${BINARY_NAME}App.dmg ./build/packages/done/dmg/
 
@@ -122,7 +140,7 @@ help:
 	@echo "\033[0;32m\nRUN COMMANDS\033[0m"
 	@echo "\033[0;36mname\t\t-\tshow name with version"
 	@echo "run\t\t-\trunning programm with go run"
-	@echo "test\t\t-\ttesting test with go test ./... -v -cover\033[0m"
+	@echo "test\t\t-\trunning test with go test ./... -v -cover\033[0m"
 
 	@echo "\033[0;32m\nBUILD COMMANDS\033[0m"
 	@echo "\033[0;36mbuild\t\t-\tbuilding binary file in ${BUILDPATH} in accordance with your machine"
@@ -143,12 +161,13 @@ help:
 
 	@echo "\033[0;32m\nUN/INSTALL COMMANDS\033[0m"
 	@echo "\033[0;36minstallMacOS\t-\tinstall to MacOS"
-	@echo "uninstallMacOs\t-\tuninstall from MacOS\033[0m"
+	@echo "uninstallMacOs\t-\tuninstall from MacOS"
+	@echo "installLinux\t-\tinstall .deb to Linux"
+	@echo "uninstallLinux\t-\tuninstall from Linux\033[0m"
 
 	@echo "\033[0;32m\nOTHER COMMANDS\033[0m"
 	@echo "\033[0;36mzip\t\t-\tcreate this folder archive in ./zip with datastamp"
 	@echo "tobin\t\t-\tcopying binary file to /usr/bin"
-	@echo "todeb\t\t-\tcopying binary file to ${DEBPACKAGE}/usr/bin"
 	@echo "help\t\t-\tshow this help\n\033[0m"
 
 zip: clean-all
