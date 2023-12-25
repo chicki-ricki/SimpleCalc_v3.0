@@ -1,10 +1,10 @@
-Package: clevercalc
-Version: 0.0.2
+Package: smartCalc
+Version: 3.0
 Section: misc
 Priority: optional
 Depends: libc6, libgl1
 Architecture: amd64
 Essential: no
 Installed-Size: 26000
-Maintainer: Anton Bryntsev <715787@gmail.com>
+Maintainer: Kostareva Eugenia <eugenia.kostareva@gmail.com>
 Description: Calculator with equal and graph

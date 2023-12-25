@@ -1,9 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=0.0.2
+Version=3.0
 Type=Application
 Terminal=false
-Exec=/usr/bin/clevercalc
-Name=Clevercalc
-Icon=clevercalc
-Keywords=clevercalc;
+Exec=/usr/bin/smartCalcalc
+Name=smartCalc
+Icon=smartCalc
+Keywords=smartCalc;
