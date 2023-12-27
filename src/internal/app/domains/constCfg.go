@@ -85,8 +85,6 @@ func readConfig(fileName string, c *Cfg) error {
 func InitConfig(fileName string) *Cfg {
 	var c Cfg
 
-	// fmt.Println("testDir:", userDir)
-
 	if fileName != "" {
 		if err := readConfig(fileName, &c); err == nil {
 			return &c

@@ -56,3 +56,4 @@ calc
 go.sum
 *_no.go
 no_*
+*.old

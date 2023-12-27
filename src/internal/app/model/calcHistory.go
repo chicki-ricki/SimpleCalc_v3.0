@@ -8,8 +8,6 @@ import (
 	d "smartcalc/internal/app/domains"
 )
 
-// const FILENAME string = "history.json"
-
 type calcHistory struct {
 	config          d.Cfg
 	fileName        string

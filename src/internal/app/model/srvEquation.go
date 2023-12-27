@@ -28,7 +28,6 @@ func NewEquation(in ModelsInput) *equationModel {
 
 // Implementing GetResult interface for equationModel
 func (e *equationModel) GetResult() (out ModelsOutput) {
-	// var rez calcViewResult
 	out.Mode = 0
 	out.ModelEquationResult.Mode = 0
 
@@ -139,14 +138,14 @@ func (e *equationModel) insertSpases(str string) string {
 		if char == ' ' {
 			continue
 		}
-		if strings.Contains(")(^+-*/", string(char)) {
+		if unicode.IsDigit(char) || unicode.IsLetter(char) || char == '.' || (len(retStr) > 1 && retStr[len(retStr)-1:] == "e") {
+			retStr += string(char)
+		} else if strings.Contains(")(^+-*/", string(char)) {
 			retStr += " " + string(char) + " "
 		} else if char == 'm' {
 			retStr += " " + string(char)
 		} else if char == 'd' {
 			retStr += string(char) + " "
-		} else if unicode.IsDigit(char) || unicode.IsLetter(char) || char == '.' || (len(retStr) > 1 && retStr[len(retStr)-1:] == "e") {
-			retStr += string(char)
 		} else {
 			retStr += string(char) + " "
 		}

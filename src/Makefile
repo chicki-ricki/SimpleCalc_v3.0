@@ -173,3 +173,6 @@ help:
 zip: clean-all
 	@tar --exclude 'zip' -cvaf ./zip/${BINARY_NAME}_srs_${DATE}.tar.gz *
 	@echo "\033[0;32marchive file created to ../ as ${BINARY_NAME}_srs_${DATE}.tar.gz\033[0m"
+
+format:
+	gofmt -w */*/*.go
