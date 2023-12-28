@@ -1,6 +1,7 @@
 package model
 
 import (
+	"image/draw"
 	d "smartcalc/internal/app/domains"
 )
 
@@ -61,9 +62,10 @@ type ModelResultEqual struct {
 
 // structure for Ouput Graph data
 type ModelResultGraph struct {
-	Err       bool   // true = error
-	Mode      int    // calc - 0, equal - 1 or graph - 2
-	ResultStr string // raw data
+	Err        bool   // true = error
+	Mode       int    // calc - 0, equal - 1 or graph - 2
+	ResultStr  string // raw data
+	GraphImage draw.Image
 }
 
 // common interface for services
@@ -72,18 +74,20 @@ type request interface {
 }
 
 // struct for CalcModel
-type calcModel struct {
+type CalcModel struct {
 	Config  *d.Cfg
 	request request
 	history calcHistory
 }
 
+var ModelCalc = NewCalcModel(d.Config)
+
 //---------------------------------------Types END
 
 // Creating New CalcModel object
-func NewCalcModel(cfgm *d.Cfg) *calcModel {
+func NewCalcModel(cfgm *d.Cfg) *CalcModel {
 
-	return &calcModel{
+	return &CalcModel{
 		Config:  cfgm,
 		history: *NewCalcHistory(*cfgm),
 	}
@@ -91,7 +95,7 @@ func NewCalcModel(cfgm *d.Cfg) *calcModel {
 
 //-------------------Implementing Models Interface
 
-func (m *calcModel) GetCalcResult(in ModelsInput) (out ModelsOutput) {
+func (m *CalcModel) GetCalcResult(in ModelsInput) (out ModelsOutput) {
 
 	if in.Mode > -1 && in.Mode < 3 {
 		switch in.Mode {
@@ -112,10 +116,10 @@ func (m *calcModel) GetCalcResult(in ModelsInput) (out ModelsOutput) {
 	return
 }
 
-func (m *calcModel) CleanHistory() {
+func (m *CalcModel) CleanHistory() {
 	m.history.CleanHistory()
 }
 
-func (m *calcModel) GetHistory() []d.HistoryItem {
+func (m *CalcModel) GetHistory() []d.HistoryItem {
 	return m.history.historyData
 }

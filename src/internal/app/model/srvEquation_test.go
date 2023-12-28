@@ -32,7 +32,7 @@ var (
 		{"1.1e+10 + 1.1e+10", 2.2e+10},
 		{"2.4e+10 - 2.4e+10", 0},
 		{"-2 + 3", 1},
-		{"(5.2e+4 + sin(0.1) - 10) + (-0.2)", 51989.899833416646},
+		{"(5.2e+4 + sin(0.1) - 10) + (-0.2)", 51989.80174532837},
 	}
 
 	testCasesCheckUnary = []struct {
@@ -52,9 +52,12 @@ var (
 		expect string
 	}{
 		{"(0-2)", " ( 0 - 2 ) "},
+		{"( 0-2 )", " ( 0 - 2 ) "},
+		{"( 0-.5 )", " ( 0 - 0.5 ) "},
+		{".4*( 0-.345 )", "0.4 *  ( 0 - 0.345 ) "},
 		{"(0-2)*3", " ( 0 - 2 )  * 3"},
 		{"(0-2)*((0-3))", " ( 0 - 2 )  *  (  ( 0 - 3 )  ) "},
-		{"0.66e+4+2e+2+300", "0.66e + 4 + 2e + 2 + 300"},
+		{"0.66e+4+2e+2+300", "0.66e+4 + 2e+2 + 300"},
 	}
 
 	testCasesPoland = []struct {
@@ -69,15 +72,26 @@ var (
 		enter  []string
 		expect float64
 	}{
-		{[]string{"0", "cos"}, 1},
-		{[]string{"0", "sin"}, 0},
+		{[]string{"2", "0", "cos", "*", "0", "cos", "+"}, 3},
+		{[]string{"2", "90", "sin", "*", "0", "sin", "+"}, 2},
+		{[]string{"90", "sin"}, 1},
+		{[]string{"2", "1", "asin", "*", "1", "asin", "+"}, 270},
 		{[]string{"1", "asin"}, 90},
+		{[]string{"2", "0", "acos", "*", "-1", "acos", "+"}, 360},
 		{[]string{"0", "acos"}, 90},
 		{[]string{"25", "sqrt"}, 5},
+		{[]string{"25", "sqrt", "25", "sqrt", "*", "36", "sqrt", "+"}, 31},
 		{[]string{"1", "tan"}, 0.017455064928217585},
+		{[]string{"180", "tan", "180", "tan", "*", "45", "tan", "+", "6", "+"}, 7},
 		{[]string{"1", "atan"}, 45},
+		{[]string{"1", "atan", "1", "atan", "+", "0", "atan", "-"}, 90},
 		{[]string{"7.38905609893065", "ln"}, 2},
+		{[]string{"4", "3.38905609893065", "+", "ln"}, 2},
+		{[]string{"4", "sqrt", "7.38905609893065", "ln", "+"}, 4},
 		{[]string{"100", "log"}, 2},
+		{[]string{"1000", "log"}, 3},
+		{[]string{"1000", "log", "10", "log", "+", "sqrt"}, 2},
+		{[]string{"1000", "8999", "+", "10", "log", "+", "log"}, 4},
 		{[]string{"1", "2", "+"}, 3},
 		{[]string{"3", "1", "-"}, 2},
 		{[]string{"4", "5", "*"}, 20},
@@ -137,14 +151,16 @@ func TestOnlyCalculate(t *testing.T) {
 		t.Errorf("Equations onlyCalculate incorrect - expected: rez=|%v|, err=|%v|; actual: rez=|%v|, err=|%v|", rez, err, rez, err)
 	}
 	er.equation = ("34-24/0")
-	rez = 0
-	rez, err = er.onlyCalculate(er.prepareString(er.equation))
+	_, err = er.onlyCalculate(er.prepareString(er.equation))
 	if err == nil {
 		t.Errorf("Equations onlyCalculate incorrect - expected: err=|%v|; actual: err=|%v|", true, false)
 	}
-	er.equation = ("")
-	rez = 0
+	er.equation = ("42e-2*350") // rez = 147
 	rez, err = er.onlyCalculate(er.prepareString(er.equation))
+	if err != nil || rez != 147 {
+		t.Errorf("Equations onlyCalculate incorrect - expected: err=|%v|; actual: err=|%v|", nil, err)
+	}
+	_, err = er.onlyCalculate("")
 	if err == nil {
 		t.Errorf("Equations onlyCalculate incorrect - expected: err=|%v|; actual: err=|%v|", true, false)
 	}
@@ -188,7 +204,6 @@ func TestToPolandNotation(t *testing.T) {
 	var er equationModel
 	for _, testCase := range testCasesPoland {
 		actual := er.toPolandNotation(testCase.val)
-		// if actual != testCase.expect {
 		if !reflect.DeepEqual(actual, testCase.expect) {
 			t.Errorf("Result was incorrect, expected: %v, actual: %v\n", testCase.expect, actual)
 		}
@@ -210,7 +225,6 @@ func TestCalculateEquation(t *testing.T) {
 func TestStartCalculate(t *testing.T) {
 	var er equationModel
 	for _, testCase := range testCasesStartCalculate {
-		// fmt.Println(testCase.val, " -> ", er.prepareString(testCase.val))
 		actual, err := er.startCalculate(er.prepareString(testCase.val))
 		if err == nil && actual != testCase.expect {
 			t.Errorf("Result was incorrect, expected: |%v|, actual: |%v|\n", testCase.expect, actual)

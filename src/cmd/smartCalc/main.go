@@ -22,11 +22,7 @@ func main() {
 	app := app.New()
 
 	// Set Theme
-	if d.Config.DarkTheme != "yes" {
-		app.Settings().SetTheme(theme.LightTheme())
-	} else {
-		app.Settings().SetTheme(theme.DarkTheme())
-	}
+	theme.DefaultTheme()
 
 	fmt.Println("TempFileDir:", d.Config.TempFileDir)
 	fmt.Println("WorkDir:", d.Config.WorkDir)

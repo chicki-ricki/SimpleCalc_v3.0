@@ -13,19 +13,19 @@ PWD=$(shell pwd)
 TIME1 := $(shell date +%s)
 
 GO=go1.19.2
-#GO=go
+# GO=go
 
 # RUN COMMANDS
 name:
 	@echo ${BINARY_NAME}-${VERSION}
 
 run:
-	go run ./cmd/${BINARY_NAME}/main.go 
+	${GO} run ./cmd/${BINARY_NAME}/main.go 
 
 test: testing
 
 testing:
-	go test ./... -v -cover
+	${GO} test ./... -v -cover
 
 # BUILDING COMMANDS
 
@@ -176,3 +176,13 @@ zip: clean-all
 
 format:
 	gofmt -w */*/*.go
+
+lint:
+	golangci-lint run
+	${GO} vet cmd/smartCalc/main.go
+	@echo lint is ok
+
+cover:
+	@${GO} test -covermode=count -coverpkg=./internal/app/model -coverprofile ./test/cover.out -v ./internal/app/model > /dev/null
+	@${GO} tool cover -html ./test/cover.out -o ./test/cover.html > /dev/null
+	@open ./test/cover.html

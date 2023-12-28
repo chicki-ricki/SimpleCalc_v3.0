@@ -72,7 +72,7 @@ func (c *convert) UIToModel(in interface{}) (m.ModelsInput, bool) {
 	case 0:
 		return c.copyEquationForModel(v)
 	case 1:
-		t.DbgPrint(fmt.Sprint("Choice Equal"))
+		t.DbgPrint("Choice Equal")
 		return c.copyEqualForModel(v)
 	case 2:
 		return c.copyGraphForModel(v)

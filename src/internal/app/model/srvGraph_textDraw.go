@@ -6,6 +6,7 @@ import (
 	"image/color"
 	"image/draw"
 	"os"
+	t "smartcalc/internal/app/tools"
 
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
@@ -16,9 +17,23 @@ import (
 // Print Logo at the picture
 func (g *graphModel) drawLogo(dst draw.Image, yBase int, Text string) {
 
-	fontBytes, _ := os.ReadFile(g.config.TypePath)
-	fnt, _ := truetype.Parse(fontBytes)
+	// Read font from config path
+	fontBytes, err := os.ReadFile(g.config.TypePath)
+	if err != nil {
+		// t.Clg.Warning(fmt.Sprintf("_drawLogo_ cannot read logo font from path: %s", g.config.TypePath))
+		t.DbgPrint(fmt.Sprintf("_drawLogo_ cannot read logo font from path: %s", g.config.TypePath))
+		return
+	}
 
+	// Parce font
+	fnt, err := truetype.Parse(fontBytes)
+	if err != nil {
+		// t.Clg.Warning(fmt.Sprintf("_drawLogo_ cannot parce font from path: %s: %v", g.config.TypePath, err))
+		t.DbgPrint(fmt.Sprintf("_drawLogo_ cannot parce font from path: %s: %v", g.config.TypePath, err))
+		return
+	}
+
+	// Create font drawer
 	d := font.Drawer{
 		Dst: dst,
 		Src: image.NewUniform(color.RGBA{G: 0x88, B: 0xAA, A: 0xFF}),
@@ -27,10 +42,14 @@ func (g *graphModel) drawLogo(dst draw.Image, yBase int, Text string) {
 			DPI:  72,
 		}),
 	}
+
+	// Calculate draw pisition
 	d.Dot = fixed.Point26_6{
 		X: (fixed.I(int(g.config.XWindowGraph)) - d.MeasureString(Text) - fixed.I(17)),
 		Y: fixed.I((yBase + (36 / 2) - 12)),
 	}
+
+	// Drawing text string
 	d.DrawString(Text)
 }
 

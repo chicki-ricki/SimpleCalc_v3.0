@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"strings"
 
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -151,16 +150,16 @@ func (c *calcView) charButtonEqual(char rune) *widget.Button {
 //---------------------------------------------------------------------------------
 
 // Shortcut handlers
-func (c *calcView) onPasteShortcut(shortcut fyne.Shortcut) {
-	content := shortcut.(*fyne.ShortcutPaste).Clipboard.Content()
-	if _, err := strconv.ParseFloat(content, 64); err != nil {
-		return
-	}
-	c.display(c.equation + content)
-}
+// func (c *calcView) onPasteShortcut(shortcut fyne.Shortcut) {
+// 	content := shortcut.(*fyne.ShortcutPaste).Clipboard.Content()
+// 	if _, err := strconv.ParseFloat(content, 64); err != nil {
+// 		return
+// 	}
+// 	c.display(c.equation + content)
+// }
 
-func (c *calcView) onCopyShortcut(shortcut fyne.Shortcut) {
-	shortcut.(*fyne.ShortcutCopy).Clipboard.SetContent(c.equation)
-}
+// func (c *calcView) onCopyShortcut(shortcut fyne.Shortcut) {
+// 	shortcut.(*fyne.ShortcutCopy).Clipboard.SetContent(c.equation)
+// }
 
 //--------------------------------------Interface for tabs composing

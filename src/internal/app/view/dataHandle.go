@@ -1,7 +1,6 @@
 package view
 
 import (
-	m "smartcalc/internal/app/model"
 	t "smartcalc/internal/app/tools"
 
 	"fmt"
@@ -43,28 +42,28 @@ func (c *calcView) createUIDataEqual() *UIDataEqual {
 	}
 }
 
-func (c *calcView) convertToUI(in interface{}) (res UIResult) {
-	// var person = (*Person)(data)
-	tr := reflect.ValueOf(in)
-	t.DbgPrint(fmt.Sprint("t=", tr, tr.Field(0).Bool()))
-	if tr.Field(0).Bool() {
-		res.err = true
-		return
-	} else {
-		res.mode = int(tr.Field(1).Int())
-		switch res.mode {
-		case 0:
-			fmt.Println(in, reflect.TypeOf((in)))
-			eq := in.(m.ModelResultEquation)
-			fmt.Println(eq, reflect.TypeOf((eq)))
-		case 1, 2:
-			res.resultStr = tr.Field(2).String()
-			return
-		}
-		res.err = true
-	}
-	return
-}
+// func (c *calcView) convertToUI(in interface{}) (res UIResult) {
+// 	// var person = (*Person)(data)
+// 	tr := reflect.ValueOf(in)
+// 	t.DbgPrint(fmt.Sprint("t=", tr, tr.Field(0).Bool()))
+// 	if tr.Field(0).Bool() {
+// 		res.err = true
+// 		return
+// 	} else {
+// 		res.mode = int(tr.Field(1).Int())
+// 		switch res.mode {
+// 		case 0:
+// 			fmt.Println(in, reflect.TypeOf((in)))
+// 			eq := in.(m.ModelResultEquation)
+// 			fmt.Println(eq, reflect.TypeOf((eq)))
+// 		case 1, 2:
+// 			res.resultStr = tr.Field(2).String()
+// 			return
+// 		}
+// 		res.err = true
+// 	}
+// 	return
+// }
 
 func (c *calcView) convertToUIResult(in interface{}) (res UIResult) {
 
@@ -97,13 +96,13 @@ func (c *calcView) showGraph() {
 
 func (c *calcView) loadImage(fileName string) (im image.Image, errout bool) {
 	fd, err := os.Open(fileName)
-	t.DbgPrint(fmt.Sprint("OPEN"))
+	t.DbgPrint("OPEN")
 	if err != nil {
 		fmt.Println("OPEN ERROR")
 		errout = true
 	}
 	im, err = png.Decode(fd)
-	t.DbgPrint(fmt.Sprint("DECODE"))
+	t.DbgPrint("DECODE")
 	if err != nil {
 		fmt.Println("DECODE ERROR")
 		errout = true

@@ -3,8 +3,6 @@ package presenter
 import (
 	d "smartcalc/internal/app/domains"
 	m "smartcalc/internal/app/model"
-
-	"fyne.io/fyne/v2"
 )
 
 type View interface {
@@ -28,7 +26,7 @@ type errStruct struct {
 
 // presenters structure
 type presenter struct {
-	app             fyne.App
+	// app             fyne.App
 	cnv             convert
 	ViewDataChannel chan string
 }

@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"image/draw"
 	"math"
+	d "smartcalc/internal/app/domains"
 	t "smartcalc/internal/app/tools"
 	"strconv"
 )
@@ -20,7 +21,8 @@ func (g *graphModel) graphGridDraw(img draw.Image) {
 	// Print vertical grid lines
 	for _, val := range arr {
 		if val == 0 {
-			t.DbgPrint(fmt.Sprint("g.graphGridFindX(0)=", g.graphGridFindValue(0, "X")))
+			// t.Clg.DeepDebug(fmt.Sprint("_graphGridDraw_ g.graphGridFindX(0)=", g.graphGridFindValue(0, "X")))
+			t.DbgPrint(fmt.Sprint("_graphGridDraw_ g.graphGridFindX(0)=", g.graphGridFindValue(0, "X")))
 			g.arrowV(img, g.graphGridFindValue(0, "X"), 7, color.Gray{Y: uint8(0)})
 			g.drawVLine(img, 2, int(g.config.YWindowGraph)-20, g.graphGridFindValue(val, "X"), 10, color.Gray{Y: uint8(0)})
 		} else {
@@ -37,7 +39,8 @@ func (g *graphModel) graphGridDraw(img draw.Image) {
 	// Print vertical grid lines
 	for _, val := range arr {
 		if val == 0 {
-			t.DbgPrint(fmt.Sprint("g.graphGridFindY(0)=", g.graphGridFindValue(0, "Y")))
+			// t.Clg.DeepDebug(fmt.Sprint("_graphGridDraw_ g.graphGridFindY(0)=", g.graphGridFindValue(0, "Y")))
+			t.DbgPrint(fmt.Sprint("_graphGridDraw_ g.graphGridFindY(0)=", g.graphGridFindValue(0, "Y")))
 			g.drawHLine(img, 2, int(g.config.XWindowGraph)-20, 10, g.graphGridFindValue(val, "Y"), color.Gray{Y: uint8(0)})
 			g.arrowH(img, int(g.config.XWindowGraph)-7, g.graphGridFindValue(0, "Y"), color.Gray{Y: uint8(0)})
 		} else {
@@ -53,12 +56,14 @@ func (g *graphModel) graphGridDraw(img draw.Image) {
 // Drawing masshtab
 func (g *graphModel) masshtabDraw(img draw.Image, masshtabX, masshtabY float64, x0, y0 int) {
 	xLine := g.graphGridFindValue(g.xFrom+masshtabX, "X") - g.graphGridFindValue(g.xFrom, "X")
-	t.DbgPrint(fmt.Sprint("xLine for masshtab:", xLine))
+	// t.Clg.DeepDebug(fmt.Sprint("_masshtabDraw_ xLine for masshtab:", xLine))
+	d.DbgPrint(fmt.Sprint("_masshtabDraw_ xLine for masshtab:", xLine))
 	g.drawHLine(img, 3, int(xLine), x0-int(xLine)/2, y0, color.Gray{Y: uint8(0)})
 	g.drawEqualText(img, x0-20, y0+25, fmt.Sprint("X: ", masshtabX))
 
 	yLine := int(math.Abs(float64(g.graphGridFindValue(g.yFrom+masshtabY, "Y") - g.graphGridFindValue(g.yFrom, "Y"))))
-	t.DbgPrint(fmt.Sprint("yLine for masshtab:", yLine))
+	// t.Clg.DeepDebug(fmt.Sprint("_masshtabDraw_ yLine for masshtab:", yLine))
+	d.DbgPrint(fmt.Sprint("_masshtabDraw_ yLine for masshtab:", yLine))
 	g.drawVLine(img, 3, int(yLine), x0, y0-int(yLine), color.Gray{Y: uint8(0)})
 	g.drawEqualText(img, x0+10, y0+50-int(yLine), fmt.Sprint("Y: ", masshtabY))
 }
@@ -136,7 +141,7 @@ func (g *graphModel) findGridValue(masshtab, from, to float64) (arr []float64) {
 // finding masshtab for grid
 func (g *graphModel) findMasshtab(min, max float64) float64 {
 	volume := math.Abs(max - min)
-	for x := 0.01; x <= 10000000; x *= 10 {
+	for x := 0.01; x <= 1000000; x *= 10 {
 		if volume/x < 10 && volume/x >= 5 {
 			return x
 		} else if volume/x < 5 && volume/x >= 2 {
@@ -146,38 +151,64 @@ func (g *graphModel) findMasshtab(min, max float64) float64 {
 		}
 	}
 
-	return 10000000
+	return 1000000
 }
 
 // finding pixel place for value X or Y
 func (g *graphModel) graphGridFindValue(v0 float64, mode string) (Finded int) {
 	arr := []float64{}
+	var modeValue int //-1 for to < 0, +1 for from > 0, 0 for to >  && from < 0
 
+	// Creating array of X or Y according mode
 	switch mode {
 	case "X":
 		arr = g.createArrayValue(g.xFrom, g.xTo, float64(g.config.XWindowGraph))
 	case "Y":
 		arr = g.createArrayValue(g.yFrom, g.yTo, float64(g.config.YWindowGraph))
 	default:
+		// arr[0] = 0
 		return 0
 	}
 
-	var tempDelta float64 = 2000000
-	for i, val := range arr {
-		if math.Abs(v0-val) < tempDelta {
-			tempDelta = math.Abs(v0 - val)
-			Finded = i
+	// Gap calculation beetwin the closest points in array
+	deltaValue := math.Abs(arr[1] - arr[2])
+	// t.Clg.DeepDebug(fmt.Sprintf("_graphGridFindValue_ mode: |%s|, v0: |%.3f|, deltaValue: |%.5f|", mode, v0, deltaValue))
+	t.DbgPrint(fmt.Sprintf("_graphGridFindValue_ mode: |%s|, v0: |%.3f|, deltaValue: |%.5f|", mode, v0, deltaValue))
+
+	// Detection modeValue
+	if arr[0] > 0 {
+		modeValue = 1
+	} else if arr[len(arr)-1] < 0 {
+		modeValue = -1
+	}
+
+	// Find
+	// t.Clg.DeepDebug(fmt.Sprintf("_graphGridFindValue_ mode: |%s|, modeValue: |%d|", mode, modeValue))
+	t.DbgPrint(fmt.Sprintf("_graphGridFindValue_ mode: |%s|, modeValue: |%d|", mode, modeValue))
+	if v0 == 0 && modeValue != 0 {
+		switch modeValue {
+		case -1:
+			Finded = 0 - int((0-arr[len(arr)-1])/deltaValue)
+		case 1:
+			Finded = int(g.config.YWindowGraph) - int(0-arr[0]/deltaValue)
+		}
+	} else {
+		var tempDelta float64 = 2000000
+		for i, val := range arr {
+			if math.Abs(v0-val) < tempDelta {
+				tempDelta = math.Abs(v0 - val)
+				Finded = i
+			}
+		}
+
+		if mode == "Y" {
+			Finded = int(g.config.YWindowGraph) - Finded
 		}
 	}
+	// t.Clg.DeepDebug(fmt.Sprintf("_graphGridFindValue_ mode: |%s|, v0: |%.3f|, Finded: |%d|", mode, v0, Finded))
+	t.DbgPrint(fmt.Sprintf("_graphGridFindValue_ mode: |%s|, v0: |%.3f|, Finded: |%d|", mode, v0, Finded))
+	return
 
-	switch mode {
-	case "X":
-		return
-	case "Y":
-		return int(g.config.YWindowGraph) - Finded
-	default:
-		return 0
-	}
 }
 
 // formatting Grid value for print
@@ -201,7 +232,6 @@ func (g *graphModel) printGridValueY(img draw.Image, masshtabY, val float64, sid
 	} else {
 		g.drawGridText(img, g.graphGridFindValue(0, "X"), g.graphGridFindValue(val, "Y"), printNumber)
 	}
-	return
 }
 
 // Printing Grid value for X
@@ -212,5 +242,4 @@ func (g *graphModel) printGridValueX(img draw.Image, masshtabX, val float64, sid
 	} else {
 		g.drawGridText(img, g.graphGridFindValue(val, "X"), g.graphGridFindValue(0, "Y"), printNumber)
 	}
-	return
 }

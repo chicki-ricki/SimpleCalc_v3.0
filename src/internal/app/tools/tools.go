@@ -18,14 +18,14 @@ func DbgPrint(s string) {
 func LoadImage(fileName string) (im image.Image, err error) {
 
 	fd, err := os.Open(fileName)
-	DbgPrint(fmt.Sprint("OPEN File in LoadImage"))
+	DbgPrint("OPEN File in LoadImage")
 	if err != nil {
 		DbgPrint(fmt.Sprint(err))
 		return
 	}
 
 	im, err = png.Decode(fd)
-	DbgPrint(fmt.Sprint("DECODE file in LoadImage"))
+	DbgPrint("DECODE file in LoadImage")
 	if err != nil {
 		DbgPrint(fmt.Sprint(err))
 		return
@@ -55,7 +55,7 @@ func ExportImageToPng(im image.Image, fileName string) (err error) {
 // writing data to file
 func WriteData(fileName string, data []byte) (err error) {
 	fd, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0777)
-	err = os.WriteFile(fileName, data, 0777) // write json([]byte) to file
+	_ = os.WriteFile(fileName, data, 0777) // write json([]byte) to file
 	fd.Close()
 	return
 }

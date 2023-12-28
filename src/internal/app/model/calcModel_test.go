@@ -5,13 +5,13 @@ import (
 	"testing"
 )
 
-var ()
+// var ()
 
 // Creating New CalcModel object
 func TestNewCalcModel(t *testing.T) {
 	r := *NewCalcModel(configCalc)
 	s := reflect.TypeOf(r).String()
-	if s != "model.calcModel" {
+	if s != "model.CalcModel" {
 		t.Errorf("Creating object incorrect expected: %v: actual:%v", "model.calcModel", s)
 	} else if reflect.TypeOf(r.history).String() != "model.calcHistory" {
 		t.Errorf("Creating object incorrect expected: %v: actual:%v", "model.calcHistory", reflect.TypeOf(r.history).String())
@@ -23,7 +23,18 @@ func TestNewCalcModel(t *testing.T) {
 func TestGetCalcResult(t *testing.T) {
 	in := createMInputStructEqual("x^2", "4", 4)
 	calc := NewCalcModel(configCalc)
+	in.Mode = -5
 	out := calc.GetCalcResult(in)
+	if !out.Err {
+		t.Errorf("Incorrect Mode don't work, expected: error: actual:keep going")
+	}
+	in.Mode = 78
+	out = calc.GetCalcResult(in)
+	if !out.Err {
+		t.Errorf("Incorrect Mode don't work, expected: error: actual:keep going")
+	}
+	in.Mode = 1
+	out = calc.GetCalcResult(in)
 	if reflect.TypeOf(out).String() != "model.ModelsOutput" {
 		t.Errorf("Creating object incorrect expected: %v: actual:%v", "model.ModelsOutput", reflect.TypeOf(out).String())
 	}

@@ -29,6 +29,7 @@ func (g *graphModel) calculateData() {
 		}
 		g.gRM.pixelData = append(g.gRM.pixelData, g.equal.calculate(g.preparedEquation, xr))
 	}
+
 	// find MIN and MAX in Y
 	for _, val := range g.gRM.pixelData {
 		if !val.err {

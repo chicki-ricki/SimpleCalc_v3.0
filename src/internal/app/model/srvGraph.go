@@ -38,7 +38,7 @@ type graphModel struct {
 
 //---------- New object and interface implementing
 
-func (m *calcModel) NewGraph(in ModelsInput) *graphModel {
+func (m *CalcModel) NewGraph(in ModelsInput) *graphModel {
 	var graph graphModel
 	graph.equalValue = in.ModelGraphData.EqualValue
 	graph.xFromStr = in.ModelGraphData.XFromStr
@@ -87,6 +87,7 @@ func (g *graphModel) entrysGraphCheck(in ModelsInput) bool {
 func (g *graphModel) setError(out *ModelsOutput) *ModelsOutput {
 	out.Err = true
 	out.ModelGraphResult.Err = true
+	out.ModelGraphResult.ResultStr = "Error"
 	return out
 }
 
@@ -103,8 +104,10 @@ func (g *graphModel) GetResult() (out ModelsOutput) {
 	g.graphImageBuild()
 	out.ModelGraphResult.ResultStr = fmt.Sprintf("Y {%.2f .. %.2f}", g.gRM.yGraphMin, g.gRM.yGraphMax)
 
+	// out.ModelGraphResult.GraphImage = g.gRM.graphImage
 	if t.ExportImageToPng(g.gRM.graphImage, g.config.TempFileDir+g.config.TempGraph) != nil {
 		return *g.setError(&out)
+
 	}
 
 	return
@@ -130,5 +133,4 @@ func (g *graphModel) graphImageBuild() {
 
 	// Draw Logo to image
 	g.drawLogo(g.gRM.graphImage, 21, "SmartCalc")
-	return
 }

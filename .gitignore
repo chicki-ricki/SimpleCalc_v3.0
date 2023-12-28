@@ -57,3 +57,5 @@ go.sum
 *_no.go
 no_*
 *.old
+reserve_model
+src/test/cover.*
